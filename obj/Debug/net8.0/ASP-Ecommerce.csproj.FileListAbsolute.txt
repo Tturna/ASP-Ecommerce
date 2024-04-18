@@ -276,3 +276,5 @@ C:\Users\eemel\Documents\Git Repos\ASP-Ecommerce\obj\Debug\net8.0\ASP-Ecommerce.
 C:\Users\eemel\Documents\Git Repos\ASP-Ecommerce\obj\Debug\net8.0\ASP-Ecommerce.genruntimeconfig.cache
 C:\Users\eemel\Documents\Git Repos\ASP-Ecommerce\obj\Debug\net8.0\ref\ASP-Ecommerce.dll
 C:\Users\eemel\Documents\Git Repos\ASP-Ecommerce\bin\Debug\net8.0\app.db
+C:\Users\eemel\Documents\Git Repos\ASP-Ecommerce\bin\Debug\net8.0\Npgsql.dll
+C:\Users\eemel\Documents\Git Repos\ASP-Ecommerce\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll

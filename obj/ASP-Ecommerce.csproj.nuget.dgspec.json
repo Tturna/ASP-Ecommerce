@@ -52,11 +52,11 @@
               "target": "Package",
               "version": "[8.0.2, )"
             },
-            "Microsoft.EntityFrameworkCore.Sqlite": {
+            "Microsoft.EntityFrameworkCore.Tools": {
               "target": "Package",
               "version": "[8.0.2, )"
             },
-            "Microsoft.EntityFrameworkCore.Tools": {
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[8.0.2, )"
             }
