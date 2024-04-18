@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ASP_Ecommerce.Models;
 using ASP_Ecommerce.Services;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

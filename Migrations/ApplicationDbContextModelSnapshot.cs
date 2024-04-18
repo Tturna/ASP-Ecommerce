@@ -183,7 +183,7 @@ namespace ASP_Ecommerce.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<int?>("ProductModelId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Rating")
@@ -194,11 +194,16 @@ namespace ASP_Ecommerce.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductModelId");
+                    b.HasIndex("ProductId");
 
-                    b.ToTable("ProductReviewModel");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProductReviews");
                 });
 
             modelBuilder.Entity("ASP_Ecommerce.Models.ShoppingCartModel", b =>
@@ -493,7 +498,7 @@ namespace ASP_Ecommerce.Migrations
             modelBuilder.Entity("ASP_Ecommerce.Models.OrderModel", b =>
                 {
                     b.HasOne("ASP_Ecommerce.Models.UserModel", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -512,9 +517,21 @@ namespace ASP_Ecommerce.Migrations
 
             modelBuilder.Entity("ASP_Ecommerce.Models.ProductReviewModel", b =>
                 {
-                    b.HasOne("ASP_Ecommerce.Models.ProductModel", null)
+                    b.HasOne("ASP_Ecommerce.Models.ProductModel", "Product")
                         .WithMany("ProductReviews")
-                        .HasForeignKey("ProductModelId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ASP_Ecommerce.Models.UserModel", "User")
+                        .WithMany("ProductReviews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ASP_Ecommerce.Models.ShoppingCartModel", b =>
@@ -594,6 +611,13 @@ namespace ASP_Ecommerce.Migrations
             modelBuilder.Entity("ASP_Ecommerce.Models.ShoppingCartModel", b =>
                 {
                     b.Navigation("CartItems");
+                });
+
+            modelBuilder.Entity("ASP_Ecommerce.Models.UserModel", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("ProductReviews");
                 });
 #pragma warning restore 612, 618
         }

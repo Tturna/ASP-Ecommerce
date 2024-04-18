@@ -14,4 +14,10 @@ public class ProductReviewModel
     
     [Range(1, 5)]
     public required int Rating { get; set; }
+    
+    public required int ProductId { get; set; }
+    public required ProductModel Product { get; set; }
+    
+    public required int UserId { get; set; }
+    public required UserModel User { get; set; }
 }

@@ -45,4 +45,8 @@ public class UserModel : IdentityUser<int>
     // public string? PhoneNumber { get; set; }
     
     public bool SaveBillingInfo { get; set; }
+    
+    public List<OrderModel> Orders { get; set; } = [];
+    
+    public List<ProductReviewModel> ProductReviews { get; set; } = [];
 }
