@@ -50,8 +50,8 @@ public class UserModel : IdentityUser<int>
     [Required]
     public DateTime CreatedAt { get; set; }
     
-    [Required]
-    public UserRole Role { get; set; }
+    // [Required]
+    // public UserRole Role { get; set; }
     
     public int? ShoppingCartId { get; set; }
     public ShoppingCartModel? ShoppingCart { get; set; }
