@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ASP_Ecommerce.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace ASP_Ecommerce.Models;
@@ -49,7 +50,12 @@ public class UserModel : IdentityUser<int>
     [Required]
     public DateTime CreatedAt { get; set; }
     
-    public List<OrderModel> Orders { get; set; } = [];
+    [Required]
+    public UserRole Role { get; set; }
     
+    public int? ShoppingCartId { get; set; }
+    public ShoppingCartModel? ShoppingCart { get; set; }
+    
+    public List<OrderModel> Orders { get; set; } = [];
     public List<ProductReviewModel> ProductReviews { get; set; } = [];
 }

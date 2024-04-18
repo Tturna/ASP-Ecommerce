@@ -23,8 +23,8 @@ public class OrderModel
     
     [DataType(DataType.PostalCode)]
     public int PostalCode { get; set; }
-    
-    public required List<OrderItemModel> OrderItems { get; set; }
+
+    public required List<OrderItemModel> OrderItems { get; set; } = [];
     
     public int UserId { get; set; }
     public required UserModel User { get; set; }
