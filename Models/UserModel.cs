@@ -19,25 +19,25 @@ public class UserModel : IdentityUser<int>
     
     // public byte[] PasswordSalt { get; set; }
     
-    [StringLength(50)]
+    [PersonalData, StringLength(50)]
     public string? FirstName { get; set; }
     
-    [StringLength(50)]
+    [PersonalData, StringLength(50)]
     public string? LastName { get; set; }
     
-    [StringLength(50)]
+    [PersonalData, StringLength(50)]
     public string? BillingAddress { get; set; }
     
-    [StringLength(50)]
+    [PersonalData, StringLength(50)]
     public string? MaintainerAddress { get; set; }
     
-    [StringLength(50)]
+    [PersonalData, StringLength(50)]
     public string? City { get; set; }
     
-    [StringLength(50)]
+    [PersonalData, StringLength(50)]
     public string? Country { get; set; }
     
-    [DataType(DataType.PostalCode)]
+    [PersonalData, DataType(DataType.PostalCode)]
     public int? PostalCode { get; set; }
     
     // [StringLength(15)]
@@ -45,6 +45,9 @@ public class UserModel : IdentityUser<int>
     // public string? PhoneNumber { get; set; }
     
     public bool SaveBillingInfo { get; set; }
+    
+    [Required]
+    public DateTime CreatedAt { get; set; }
     
     public List<OrderModel> Orders { get; set; } = [];
     
