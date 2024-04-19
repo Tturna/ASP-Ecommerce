@@ -8,10 +8,30 @@ namespace ASP_Ecommerce.Controllers;
 [Route("/products")]
 public class ProductController(ApplicationDbContext dbContext) : Controller
 {
-    public async Task<IActionResult> Index()
+    [Route("/products")]
+    public async Task<IActionResult> OfficialProducts()
     {
-        var products = await dbContext.Products.ToArrayAsync();
-        var temp = HttpContext;
+        var products = await dbContext
+            .Products
+            .Where(p => p.Maintainer == null)
+            .AsNoTracking()
+            .ToArrayAsync();
+
+        var productsViewModel = new ProductsViewModel()
+        {
+            Products = products
+        };
+        
+        return View(productsViewModel);
+    }
+    
+    public async Task<IActionResult> MaintainerProducts()
+    {
+        var products = await dbContext
+            .Products
+            .Where(p => p.Maintainer != null)
+            .AsNoTracking()
+            .ToArrayAsync();
 
         var productsViewModel = new ProductsViewModel()
         {

@@ -21,6 +21,9 @@ public class ProductModel
     [StringLength(500)]
     public string? WarrantyDescription { get; set; }
     
+    [Required]
+    [Range(0, 1_000_000)]
+    [DataType(DataType.Currency)]
     public decimal Price { get; set; }
     
     [Required, StringLength(200)]
