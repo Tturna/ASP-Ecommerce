@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ASP_Ecommerce.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace ASP_Ecommerce.Models;

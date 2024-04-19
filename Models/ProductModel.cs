@@ -7,11 +7,11 @@ public class ProductModel
     public int Id { get; set; }
     
     [Required, StringLength(100)]
-    public string Name { get; set; }
-    
+    public string Name { get; set; } = string.Empty;
+
     [Required, StringLength(200)]
-    public string ShortDescription { get; set; }
-    
+    public string ShortDescription { get; set; } = string.Empty;
+
     [StringLength(500)]
     public string? LongDescription { get; set; }
     
@@ -24,11 +24,11 @@ public class ProductModel
     public decimal Price { get; set; }
     
     [Required, StringLength(200)]
-    public required string ImageUrl { get; set; }
-    
+    public string ImageUrl { get; set; } = string.Empty;
+
     [Required, StringLength(100)]
-    public required string CategoryPath { get; set; }
-    
+    public string CategoryPath { get; set; } = string.Empty;
+
     public int? MaintainerId { get; set; }
     public UserModel? Maintainer { get; set; }
 

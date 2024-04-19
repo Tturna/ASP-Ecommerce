@@ -1,6 +1,26 @@
-﻿@{
+﻿@model ASP_Ecommerce.Models.ViewModels.ProductsViewModel
+@using ASP_Ecommerce.Components
+@{
     ViewBag.Title = "Products";
     Layout = "_Layout";
 }
 
 <h2>Products</h2>
+
+@if (User.IsInRole("Admin"))
+{
+    <component type="typeof(AddProduct)" render-mode="Server" />
+}
+
+@foreach(var product in Model.Products)
+{
+    <div class="card" style="width: 18rem;">
+        <img src="@product.ImageUrl" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">@product.Name</h5>
+            <p class="card-text">@product.ShortDescription</p>
+            <p class="card-text">Price: @product.Price</p>
+            <a href="#" class="btn btn-primary">Add to cart</a>
+        </div>
+    </div>
+}

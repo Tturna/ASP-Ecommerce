@@ -1,21 +1,23 @@
-﻿using ASP_Ecommerce.Models;
-using ASP_Ecommerce.Models.Enums;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using ASP_Ecommerce.Models.ViewModels;
+using ASP_Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASP_Ecommerce.Controllers;
 
-public class ProductController(UserManager<UserModel> userManager) : Controller
+[Route("/products")]
+public class ProductController(ApplicationDbContext dbContext) : Controller
 {
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
-    }
+        var products = await dbContext.Products.ToArrayAsync();
+        var temp = HttpContext;
 
-    [Authorize(Roles = "Admin"), Route("/product/add")]
-    public IActionResult AddProduct()
-    {
-        return View();
+        var productsViewModel = new ProductsViewModel()
+        {
+            Products = products
+        };
+        
+        return View(productsViewModel);
     }
 }

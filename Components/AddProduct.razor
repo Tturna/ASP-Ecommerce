@@ -1,0 +1,63 @@
+﻿@using ASP_Ecommerce.Models
+@using ASP_Ecommerce.Services
+@inject ApplicationDbContext DbContext
+
+<h3>AddProduct</h3>
+
+@if (_message != string.Empty)
+{
+    <p class="alert @_alertClass">@_message</p>
+}
+
+<div>
+    @* TODO: Custom CSS *@
+    <EditForm Model="Model" OnValidSubmit="Submit" FormName="AddProduct">
+        @* Antiforgery stuff is added by default? *@
+        <DataAnnotationsValidator/>
+        <ValidationSummary class="text-danger"/>
+        <div class="form-group">
+            <label class="form-label">Product Name</label>
+            <InputText @bind-Value="Model.Name" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Short Description</label>
+            <InputText @bind-Value="Model.ShortDescription" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Category Path</label>
+            <InputText @bind-Value="Model.CategoryPath" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Image Url</label>
+            <InputText @bind-Value="Model.ImageUrl" class="form-control"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </EditForm>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private ProductModel Model { get; set; } = new();
+    
+    private string _message = string.Empty;
+    private string _alertClass = string.Empty;
+
+    private async Task Submit()
+    {
+        // Product adding is done here because a controller would require a separate request
+        // which wouldn't be a problem if HttpClient included the Identity cookie.
+        // It can probably be added manually but it's not worth the effort rn. CBA.
+        try
+        {
+            await DbContext.Products.AddAsync(Model);
+            await DbContext.SaveChangesAsync();
+            _message = "Product added successfully!";
+            _alertClass = "alert-success";
+        }
+        catch (Exception e)
+        {
+            _message = e.Message;
+            _alertClass = "alert-danger";
+        }
+    }
+}
