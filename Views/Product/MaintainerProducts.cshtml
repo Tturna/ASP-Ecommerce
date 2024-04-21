@@ -1,5 +1,6 @@
 ﻿@model ASP_Ecommerce.Models.ViewModels.ProductsViewModel
 @using ASP_Ecommerce.Components
+
 @{
     ViewBag.Title = "Maintainer Products";
     Layout = "_Layout";
@@ -14,11 +15,12 @@
 
 @foreach(var product in Model.Products)
 {
-    <div class="card" style="width: 18rem;">
-        <img src="@product.ImageUrl" class="card-img-top" alt="...">
+    <div class="card mt-3" style="width: 18rem;">
+        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
         <div class="card-body">
             <h5 class="card-title">@product.Name</h5>
             <p class="card-text">@product.ShortDescription</p>
+            <p class="card-text">Maintainer: @product.Maintainer!.UserName</p>
             <p class="card-text">Price: @product.Price</p>
             <a href="#" class="btn btn-primary">Add to cart</a>
         </div>

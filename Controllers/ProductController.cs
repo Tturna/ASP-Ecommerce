@@ -25,11 +25,13 @@ public class ProductController(ApplicationDbContext dbContext) : Controller
         return View(productsViewModel);
     }
     
+    [Route("/products/maintainer")]
     public async Task<IActionResult> MaintainerProducts()
     {
         var products = await dbContext
             .Products
             .Where(p => p.Maintainer != null)
+            .Include(p => p.Maintainer)
             .AsNoTracking()
             .ToArrayAsync();
 
