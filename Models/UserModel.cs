@@ -42,4 +42,7 @@ public class UserModel : IdentityUser<int>
     
     public List<OrderModel> Orders { get; set; } = [];
     public List<ProductReviewModel> ProductReviews { get; set; } = [];
+    
+    // [InverseProperty("Maintainer")]
+    public List<ProductModel> MaintainerProducts { get; set; } = [];
 }
