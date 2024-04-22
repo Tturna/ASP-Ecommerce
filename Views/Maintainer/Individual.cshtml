@@ -7,6 +7,23 @@
     var isOwner = User.Identity?.Name == Model.UserName;
 }
 
+<script>
+    const deleteProductConfirm = (id, name) => {
+        let result = confirm(`Are you sure you want to delete '${name}'?`);
+        if (!result) return;
+        
+        fetch(`/products/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+
 @if (isOwner)
 {
     <component type="typeof(EditMaintainer)" param-InitialModel="@Model" render-mode="Server" />
@@ -37,10 +54,15 @@ else
             <p class="card-text">@product.ShortDescription</p>
             <p class="card-text">Maintainer: @Model.UserName</p>
             <p class="card-text">Price: @product.Price</p>
-
+            
             @if (!isOwner)
             {
-                <a href="#" class="btn btn-primary">Add to cart</a>
+                <button class="btn btn-primary">Add to cart</button>
+            }
+            else
+            {
+                // TODO: Consider a quick edit button here for basic info
+                <button onclick="deleteProductConfirm(@product.Id, '@product.Name')" class="btn btn-danger">Delete</button>
             }
         </div>
     </div>

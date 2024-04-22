@@ -1,5 +1,6 @@
 ﻿using ASP_Ecommerce.Models.ViewModels;
 using ASP_Ecommerce.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,5 +42,36 @@ public class ProductController(ApplicationDbContext dbContext) : Controller
         };
         
         return View(productsViewModel);
+    }
+    
+    [Route("/products/{id:int}")]
+    [Authorize]
+    [HttpDelete]
+    public IActionResult DeleteProduct(int? id)
+    {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+        
+        var product = dbContext.Products
+            .Include(p => p.Maintainer)
+            .AsNoTracking()
+            .FirstOrDefault(p => p.Id == id);
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+        
+        if (product.Maintainer?.UserName != User.Identity!.Name)
+        {
+            return Unauthorized();
+        }
+
+        dbContext.Products.Remove(product);
+        dbContext.SaveChanges();
+
+        return Ok();
     }
 }
