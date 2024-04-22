@@ -5,20 +5,6 @@ namespace ASP_Ecommerce.Models;
 
 public class UserModel : IdentityUser<int>
 {
-    // public int Id { get; set; }
-    
-    // [Required, StringLength(50)]
-    // public string Username { get; set; }
-    
-    // [Required, StringLength(50)]
-    // [DataType(DataType.EmailAddress)]
-    // public string Email { get; set; }
-    
-    // [Required]
-    // public byte[] PasswordHash { get; set; }
-    
-    // public byte[] PasswordSalt { get; set; }
-    
     [PersonalData, StringLength(50)]
     public string? FirstName { get; set; }
     
@@ -40,17 +26,16 @@ public class UserModel : IdentityUser<int>
     [PersonalData, DataType(DataType.PostalCode)]
     public int? PostalCode { get; set; }
     
-    // [StringLength(15)]
-    // [DataType(DataType.PhoneNumber)]
-    // public string? PhoneNumber { get; set; }
-    
     public bool SaveBillingInfo { get; set; }
+    
+    [StringLength(100)]
+    public string? MaintainerServices { get; set; }
+    
+    [StringLength(100)]
+    public string? FeaturedMaintainerMessage { get; set; }
     
     [Required]
     public DateTime CreatedAt { get; set; }
-    
-    // [Required]
-    // public UserRole Role { get; set; }
     
     public int? ShoppingCartId { get; set; }
     public ShoppingCartModel? ShoppingCart { get; set; }
