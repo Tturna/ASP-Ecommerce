@@ -1,18 +1,21 @@
-﻿@model UserModel
+﻿@using ASP_Ecommerce.Components
+@model UserModel
 
 @{
     ViewBag.Title = $"Maintainer - {Model.UserName}";
     Layout = "_Layout";
 }
 
-<h2>@Model.UserName</h2>
-<p>@(Model.MaintainerAddress), @(Model.City), @(Model.Country)</p>
-<p>Services here</p>
-<p>Products and services sold here</p>
-<p>@Model.PhoneNumber</p>
-<p>@Model.Email</p>
-
 @if (User.Identity?.Name == Model.UserName)
 {
-    <h2>This is your maintainer page</h2>
+    <component type="typeof(EditMaintainer)" param-InitialModel="@Model" render-mode="Server" />
+}
+else
+{
+    <h2>@Model.UserName</h2>
+    <p>@(Model.MaintainerAddress), @(Model.City), @(Model.Country)</p>
+    <p>@Model.MaintainerServices</p>
+    <p>Products and services sold here</p>
+    <p>@Model.PhoneNumber</p>
+    <p>@Model.Email</p>
 }

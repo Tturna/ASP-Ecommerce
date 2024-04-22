@@ -1,0 +1,85 @@
+﻿@using ASP_Ecommerce.Models
+@using ASP_Ecommerce.Services
+@inject ApplicationDbContext DbContext
+
+@if (_message != string.Empty)
+{
+    <p class="alert @_alertClass">@_message</p>
+}
+
+@* TODO: Consider refactoring this (partial view/component) as it is similar to the form in maintainer registration *@
+<EditForm Model="Model" OnValidSubmit="Submit" FormName="EditMaintainer">
+    <DataAnnotationsValidator/>
+    <ValidationSummary class="text-danger"/>
+    <div class="form-group">
+        <label  class="form-label">Business Address</label>
+        <InputText @bind-Value="Model!.MaintainerAddress" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="form-label">City</label>
+        <InputText @bind-Value="Model!.City" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Postal Code</label>
+        <InputNumber @bind-Value="Model!.PostalCode" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Country</label>
+        <InputText @bind-Value="Model!.Country" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Services</label>
+        <InputText @bind-Value="Model!.MaintainerServices" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <InputText @bind-Value="Model!.PhoneNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Email</label>
+        <InputText @bind-Value="Model!.Email" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary my-3">Update</button>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public UserModel? Model { get; set; }
+
+    [Parameter]
+    public UserModel InitialModel { get; set; } = default!;
+    
+    private string _message = string.Empty;
+    private string _alertClass = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Model = InitialModel;
+    }
+
+    private void Submit()
+    {
+        // Logic is here for the same reason as in AddProduct.razor
+        var user = DbContext.Users.First(u => u.UserName == Model!.UserName);
+        
+        user.MaintainerAddress = Model!.MaintainerAddress;
+        user.City = Model!.City;
+        user.PostalCode = Model!.PostalCode;
+        user.Country = Model!.Country;
+        user.MaintainerServices = Model!.MaintainerServices;
+        user.PhoneNumber = Model!.PhoneNumber;
+
+        try
+        {
+            DbContext.SaveChanges();
+            _message = "Maintainer updated successfully.";
+            _alertClass = "alert-success";
+        }
+        catch (Exception e)
+        {
+            _message = "An error occurred while updating the maintainer. Please try again.";
+            _alertClass = "alert-danger";
+        }
+    }
+}
