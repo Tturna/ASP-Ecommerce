@@ -1,0 +1,18 @@
+﻿@model UserModel
+
+@{
+    ViewBag.Title = $"Maintainer - {Model.UserName}";
+    Layout = "_Layout";
+}
+
+<h2>@Model.UserName</h2>
+<p>@(Model.MaintainerAddress), @(Model.City), @(Model.Country)</p>
+<p>Services here</p>
+<p>Products and services sold here</p>
+<p>@Model.PhoneNumber</p>
+<p>@Model.Email</p>
+
+@if (User.Identity?.Name == Model.UserName)
+{
+    <h2>This is your maintainer page</h2>
+}

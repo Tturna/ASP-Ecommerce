@@ -1,0 +1,23 @@
+﻿@model UserModel[]
+
+@{
+    ViewBag.Title = "Maintainers";
+    Layout = "_Layout";
+}
+
+<h2>Maintainers</h2>
+
+@foreach (var maintainer in Model)
+{
+    <div class="card mt-3" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title text-center">@maintainer.UserName</h5>
+            <p class="card-text text-center">@maintainer.MaintainerAddress</p>
+            <p class="card-text text-center">@maintainer.City</p>
+            <p class="card-text text-center">@maintainer.Country</p>
+            <p class="card-text text-center">@maintainer.PhoneNumber</p>
+            <p class="card-text text-center">@maintainer.Email</p>
+            <a href="@Url.Action("Index", "Maintainer", new { id = maintainer.Id })" class="btn btn-primary">View Maintainer</a>
+        </div>
+    </div>
+}
