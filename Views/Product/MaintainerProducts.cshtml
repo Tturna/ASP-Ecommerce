@@ -8,11 +8,6 @@
 
 <h1>Maintainer Products</h1>
 
-@if (User.IsInRole("Admin"))
-{
-    <component type="typeof(AddProduct)" render-mode="Server" />
-}
-
 @foreach(var product in Model.Products)
 {
     <div class="card mt-3" style="width: 18rem;">

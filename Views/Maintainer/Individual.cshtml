@@ -4,9 +4,10 @@
 @{
     ViewBag.Title = $"Maintainer - {Model.UserName}";
     Layout = "_Layout";
+    var isOwner = User.Identity?.Name == Model.UserName;
 }
 
-@if (User.Identity?.Name == Model.UserName)
+@if (isOwner)
 {
     <component type="typeof(EditMaintainer)" param-InitialModel="@Model" render-mode="Server" />
 }
@@ -18,4 +19,29 @@ else
     <p>Products and services sold here</p>
     <p>@Model.PhoneNumber</p>
     <p>@Model.Email</p>
+}
+
+<h3>Products</h3>
+
+@if (isOwner)
+{
+    <component type="typeof(AddProduct)" render-mode="Server" />
+}
+
+@foreach (var product in Model.MaintainerProducts)
+{
+    <div class="card mt-3" style="width: 18rem;">
+        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+        <div class="card-body">
+            <h5 class="card-title">@product.Name</h5>
+            <p class="card-text">@product.ShortDescription</p>
+            <p class="card-text">Maintainer: @Model.UserName</p>
+            <p class="card-text">Price: @product.Price</p>
+
+            @if (!isOwner)
+            {
+                <a href="#" class="btn btn-primary">Add to cart</a>
+            }
+        </div>
+    </div>
 }

@@ -24,13 +24,24 @@ public class MaintainerController(ApplicationDbContext dbContext, UserManager<Us
             return View(maintainers);
         }
         
-        var user = dbContext.Users.FirstOrDefault(u => u.Id == id);
+        var user = dbContext.Users
+            .Include(u => u.MaintainerProducts)
+            .AsNoTracking()
+            .FirstOrDefault(u => u.Id == id);
 
         if (user?.MaintainerAddress == null)
         {
             return NotFound();
         }
         
+        // Remove circular reference so this object can be serialized and
+        // passed to a Razor component.
+        user.MaintainerProducts = user.MaintainerProducts.Select(p =>
+        {
+            p.Maintainer = null;
+            return p;
+        }).ToList();
+
         return View("Individual", user);
     }
 

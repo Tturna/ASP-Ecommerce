@@ -45,4 +45,27 @@ public class UserModel : IdentityUser<int>
     
     // [InverseProperty("Maintainer")]
     public List<ProductModel> MaintainerProducts { get; set; } = [];
+    
+    public UserModel() { }
+
+    // Clone constructor
+    public UserModel(UserModel source)
+    {
+        FirstName = source.FirstName;
+        LastName = source.LastName;
+        BillingAddress = source.BillingAddress;
+        MaintainerAddress = source.MaintainerAddress;
+        City = source.City;
+        Country = source.Country;
+        PostalCode = source.PostalCode;
+        SaveBillingInfo = source.SaveBillingInfo;
+        MaintainerServices = source.MaintainerServices;
+        FeaturedMaintainerMessage = source.FeaturedMaintainerMessage;
+        CreatedAt = source.CreatedAt;
+        ShoppingCartId = source.ShoppingCartId;
+        ShoppingCart = source.ShoppingCart;
+        Orders = source.Orders;
+        ProductReviews = source.ProductReviews;
+        MaintainerProducts = source.MaintainerProducts;
+    }
 }
