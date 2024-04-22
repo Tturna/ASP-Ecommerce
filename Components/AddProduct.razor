@@ -69,8 +69,6 @@
             {
                 Model.Maintainer = _user;
                 Model.MaintainerId = _user.Id;
-                
-                // _user.MaintainerProducts.Add(Model);
             }
             
             await DbContext.Products.AddAsync(Model);
