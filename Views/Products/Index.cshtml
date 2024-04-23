@@ -12,10 +12,13 @@
     <component type="typeof(AddProduct)" render-mode="Server" />
 }
 
+@* TODO: Consider refactoring this to use a partial view or a component as this is duplicated in all product lists *@
 @foreach(var product in Model.Products)
 {
     <div class="card mt-3" style="width: 18rem;">
-        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+        <a asp-controller="Products" asp-action="Product" asp-route-id="@product.Id">
+            <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+        </a>
         <div class="card-body">
             <h5 class="card-title">@product.Name</h5>
             <p class="card-text">@product.ShortDescription</p>

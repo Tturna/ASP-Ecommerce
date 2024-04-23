@@ -8,8 +8,7 @@ namespace ASP_Ecommerce.Controllers;
 
 public class ProductsController(ApplicationDbContext dbContext) : Controller
 {
-    [Route("/products")]
-    public async Task<IActionResult> OfficialProducts()
+    public async Task<IActionResult> Index()
     {
         var products = await dbContext
             .Products
@@ -41,6 +40,19 @@ public class ProductsController(ApplicationDbContext dbContext) : Controller
         };
         
         return View(productsViewModel);
+    }
+
+    [Route("/products/{id:int}")]
+    public IActionResult Product(int id)
+    {
+        var product = dbContext.Products.FirstOrDefault(p => p.Id == id);
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+        
+        return View(product);
     }
     
     [Authorize]
