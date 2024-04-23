@@ -6,8 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ASP_Ecommerce.Controllers;
 
-[Route("/products")]
-public class ProductController(ApplicationDbContext dbContext) : Controller
+public class ProductsController(ApplicationDbContext dbContext) : Controller
 {
     [Route("/products")]
     public async Task<IActionResult> OfficialProducts()
@@ -44,10 +43,9 @@ public class ProductController(ApplicationDbContext dbContext) : Controller
         return View(productsViewModel);
     }
     
-    [Route("/products/{id:int}")]
     [Authorize]
     [HttpDelete]
-    public IActionResult DeleteProduct(int? id)
+    public IActionResult Delete(int? id)
     {
         if (id == null)
         {

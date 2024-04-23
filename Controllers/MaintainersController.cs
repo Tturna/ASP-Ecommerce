@@ -9,8 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ASP_Ecommerce.Controllers;
 
-[Route("/maintainers")]
-public class MaintainerController(ApplicationDbContext dbContext, UserManager<UserModel> userManager) : Controller
+public class MaintainersController(ApplicationDbContext dbContext, UserManager<UserModel> userManager) : Controller
 {
     public IActionResult Index(int? id)
     {
@@ -45,13 +44,13 @@ public class MaintainerController(ApplicationDbContext dbContext, UserManager<Us
         return View("Individual", user);
     }
 
-    [Authorize, Route("/maintainers/register")]
+    [Authorize]
     public IActionResult Register()
     {
         return View();
     }
 
-    [HttpPost, Authorize, ValidateAntiForgeryToken, Route("/maintainers/register")]
+    [HttpPost, Authorize, ValidateAntiForgeryToken]
     public IActionResult Register([FromForm] BecomeMaintainerViewModel newMaintainerData)
     {
         if (!ModelState.IsValid)
