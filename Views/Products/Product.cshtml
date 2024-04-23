@@ -1,16 +1,72 @@
 ﻿@model ProductModel
 
 @{
-    ViewBag.Title = "@Model.Name";
+    ViewBag.Title = Model.Name;
     Layout = "_Layout";
+    var isOfficialProduct = Model.Maintainer == null;
+    var isOwner = (!isOfficialProduct && Model.Maintainer!.UserName == User.Identity?.Name) ||
+                  (isOfficialProduct && User.IsInRole("Admin"));
 }
 
-<img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid">
-<h2>@Model.Name</h2>
-<p>Score here</p>
-<p>@Model.ShortDescription</p>
-<p>@(Model.Price) €</p>
-<button class="btn btn-primary">Add to cart</button>
+@if (!isOwner)
+{
+    <div class="w-100 d-flex flex-row flex-nowrap">
+        <div class="w-50">
+            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid">
+        </div> 
+        <div class="w-50">
+            <h2>@Model.Name</h2>
+            <p>Score here</p>
+            <p>@Model.ShortDescription</p>
+            <div class="d-flex flex-row flex-nowrap justify-content-start">
+                <h2 class="mx-3">@(Model.Price) €</h2>
+                <button class="btn btn-primary">Add to cart</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <form asp-action="Edit" asp-route-id="@Model.Id">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="ImageUrl">Image URL</label>
+            <input asp-for="ImageUrl" class="form-control"/>
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control"/>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ShortDescription">Short description</label>
+            <input asp-for="ShortDescription" class="form-control"/>
+            <span asp-validation-for="ShortDescription" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" class="form-control"/>
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LongDescription">Long description</label>
+            <input asp-for="LongDescription" class="form-control"/>
+            <span asp-validation-for="LongDescription" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="TechDescription">Technical description</label>
+            <input asp-for="TechDescription" class="form-control"/>
+            <span asp-validation-for="TechDescription" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="WarrantyDescription">Warranty description</label>
+            <input asp-for="WarrantyDescription" class="form-control"/>
+            <span asp-validation-for="WarrantyDescription" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary my-3">Save</button>
+    </form>
+}
 
 <h3>Product description</h3>
 <p>@Model.LongDescription</p>

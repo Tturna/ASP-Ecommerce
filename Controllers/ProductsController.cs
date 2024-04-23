@@ -1,4 +1,5 @@
-﻿using ASP_Ecommerce.Models.ViewModels;
+﻿using ASP_Ecommerce.Models;
+using ASP_Ecommerce.Models.ViewModels;
 using ASP_Ecommerce.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +46,10 @@ public class ProductsController(ApplicationDbContext dbContext) : Controller
     [Route("/products/{id:int}")]
     public IActionResult Product(int id)
     {
-        var product = dbContext.Products.FirstOrDefault(p => p.Id == id);
+        var product = dbContext.Products
+            .Include(p => p.Maintainer)
+            .AsNoTracking()
+            .FirstOrDefault(p => p.Id == id);
 
         if (product == null)
         {
@@ -83,5 +87,60 @@ public class ProductsController(ApplicationDbContext dbContext) : Controller
         dbContext.SaveChanges();
 
         return Ok();
+    }
+
+    [Authorize]
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+        
+        var targetProduct = dbContext.Products
+            .Include(p => p.Maintainer)
+            .FirstOrDefault(p => p.Id == id);
+
+        if (targetProduct == null)
+        {
+            return NotFound();
+        }
+
+        var isMaintainerAndOwner = targetProduct.Maintainer != null &&
+                                targetProduct.Maintainer.UserName == User.Identity?.Name;
+
+        var isOfficialAndAdmin = targetProduct.Maintainer == null &&
+                                 User.IsInRole("Admin");
+        
+        if (!isMaintainerAndOwner && !isOfficialAndAdmin)
+        {
+            return Unauthorized();
+        }
+
+        var canUpdate = await TryUpdateModelAsync(
+            targetProduct,
+            string.Empty,
+            p => p.ImageUrl,
+            p => p.Name,
+            p => p.ShortDescription,
+            p => p.Price,
+            p => p.LongDescription,
+            p => p.TechDescription,
+            p => p.WarrantyDescription);
+        
+        if (!canUpdate)
+        {
+            return BadRequest();
+        }
+
+        try
+        {
+            await dbContext.SaveChangesAsync();
+            return RedirectToAction("Product", new { id = targetProduct.Id });
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
     }
 }
