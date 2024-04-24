@@ -1,5 +1,6 @@
 ﻿@model ASP_Ecommerce.Models.ViewModels.ProductsViewModel
 @using ASP_Ecommerce.Components
+@using ASP_Ecommerce.Models.Enums
 
 @{
     ViewBag.Title = "Maintainer Products";
@@ -8,18 +9,6 @@
 
 <h1>Maintainer Products</h1>
 
-@foreach(var product in Model.Products)
-{
-    <div class="card mt-3" style="width: 18rem;">
-        <a asp-controller="Products" asp-action="Product" asp-route-id="@product.Id">
-            <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
-        </a>
-        <div class="card-body">
-            <h5 class="card-title">@product.Name</h5>
-            <p class="card-text">@product.ShortDescription</p>
-            <p class="card-text">Maintainer: @product.Maintainer!.UserName</p>
-            <p class="card-text">Price: @product.Price</p>
-            <button onclick="addItemToCart(@product.Id)" class="btn btn-primary">Add to cart</button>
-        </div>
-    </div>
-}
+<component type="typeof(ProductList)" render-mode="Server"
+           param-InitialData="@Model"
+           param-ListType="@ProductListType.Maintainer"/>

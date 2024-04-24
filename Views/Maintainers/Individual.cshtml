@@ -1,10 +1,11 @@
 ﻿@using ASP_Ecommerce.Components
-@model UserModel
+@using ASP_Ecommerce.Models.Enums
+@model ASP_Ecommerce.Models.ViewModels.IndividualMaintainerViewModel
 
 @{
-    ViewBag.Title = $"Maintainer - {Model.UserName}";
+    ViewBag.Title = $"Maintainer - {Model.Maintainer.UserName}";
     Layout = "_Layout";
-    var isOwner = User.Identity?.Name == Model.UserName;
+    var isOwner = User.Identity?.Name == Model.Maintainer.UserName;
 }
 
 <script>
@@ -26,46 +27,21 @@
 
 @if (isOwner)
 {
-    <component type="typeof(EditMaintainer)" param-InitialModel="@Model" render-mode="Server" />
+    <component type="typeof(EditMaintainer)" param-InitialModel="@Model.Maintainer" render-mode="Server" />
 }
 else
 {
-    <h2>@Model.UserName</h2>
-    <p>@(Model.MaintainerAddress), @(Model.City), @(Model.Country)</p>
-    <p>@Model.MaintainerServices</p>
+    <h2>@Model.Maintainer.UserName</h2>
+    <p>@(Model.Maintainer.MaintainerAddress), @(Model.Maintainer.City), @(Model.Maintainer.Country)</p>
+    <p>@Model.Maintainer.MaintainerServices</p>
     <p>Products and services sold here</p>
-    <p>@Model.PhoneNumber</p>
-    <p>@Model.Email</p>
+    <p>@Model.Maintainer.PhoneNumber</p>
+    <p>@Model.Maintainer.Email</p>
 }
 
 <h3>Products</h3>
 
-@if (isOwner)
-{
-    <component type="typeof(AddProduct)" render-mode="Server" />
-}
-
-@foreach (var product in Model.MaintainerProducts)
-{
-    <div class="card mt-3" style="width: 18rem;">
-        <a asp-controller="Products" asp-action="Product" asp-route-id="@product.Id">
-            <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
-        </a>
-        <div class="card-body">
-            <h5 class="card-title">@product.Name</h5>
-            <p class="card-text">@product.ShortDescription</p>
-            <p class="card-text">Maintainer: @Model.UserName</p>
-            <p class="card-text">Price: @product.Price</p>
-            
-            @if (!isOwner)
-            {
-                <button class="btn btn-primary">Add to cart</button>
-            }
-            else
-            {
-                // TODO: Consider a quick edit button here for basic info
-                <button onclick="deleteProductConfirm(@product.Id, '@product.Name')" class="btn btn-danger">Delete</button>
-            }
-        </div>
-    </div>
-}
+<component type="typeof(ProductList)" render-mode="Server"
+           param-InitialData="@Model.ProductsViewModel"
+           param-ListType="@ProductListType.Individual"
+           param-OwnerMaintainer="@Model.Maintainer" />

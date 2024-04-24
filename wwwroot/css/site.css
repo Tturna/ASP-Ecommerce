@@ -21,6 +21,6 @@ body {
   margin-bottom: 60px;
 }
 
-[onclick] {
+.clickable, [onclick] {
   cursor: pointer;
 }

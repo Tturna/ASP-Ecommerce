@@ -1,0 +1,120 @@
+﻿@using ASP_Ecommerce.Models
+@using ASP_Ecommerce.Services
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ApplicationDbContext DbContext
+
+@if (_message != string.Empty)
+{
+    <p class="alert @_alertClass">@_message</p>
+}
+
+@if (!_isOwner)
+{
+    <div class="w-100 d-flex flex-row flex-nowrap">
+        <div class="w-50">
+            <img src="@ProductData.ImageUrl" alt="@ProductData.Name" class="img-fluid">
+        </div> 
+        <div class="w-50">
+            <h2>@ProductData.Name</h2>
+            <p>Score here</p>
+            <p>@ProductData.ShortDescription</p>
+            <div class="d-flex flex-row flex-nowrap justify-content-start">
+                <h2 class="mx-3">@(ProductData.Price) €</h2>
+                <button onclick="addItemToCart(@ProductData.Id)" class="btn btn-primary">Add to cart</button>
+            </div>
+        </div>
+    </div>
+    
+    <h3>Product description</h3>
+    <p>@Model.LongDescription</p>
+    <h3>Technical specification</h3>
+    <p>@Model.TechDescription</p>
+    <h3>Warranty information</h3>
+    <p>@Model.WarrantyDescription</p>
+}
+else
+{
+    <EditForm Model="Model" OnValidSubmit="EditProduct" FormName="EditProductForm">
+        <ValidationSummary />
+        <div class="form-group">
+            <label class="form-label">Image URL</label>
+            <InputText @bind-Value="Model.ImageUrl" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Name</label>
+            <InputText @bind-Value="Model.Name" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Short description</label>
+            <InputText @bind-Value="Model.ShortDescription" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Price</label>
+            <InputNumber @bind-Value="Model.Price" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Long description</label>
+            <InputText @bind-Value="Model.LongDescription" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Technical description</label>
+            <InputText @bind-Value="Model.TechDescription" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Warranty description</label>
+            <InputText @bind-Value="Model.WarrantyDescription" class="form-control"/>
+        </div>
+        <button type="submit" class="btn btn-primary my-3">Save</button>
+    </EditForm>
+}
+
+@code {
+    [SupplyParameterFromForm]
+    public ProductModel Model { get; set; } = new();
+    
+    [Parameter]
+    public ProductModel ProductData { get; set; } = default!;
+    
+    private string _message = string.Empty;
+    private string _alertClass = string.Empty;
+    private bool _isOwner;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Model = ProductData ??
+                throw new ArgumentNullException(nameof(ProductData), "ProductData must be passed to the component");
+
+        var principal = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User;
+        var isOfficialProduct = ProductData.Maintainer == null;
+        
+        _isOwner = (!isOfficialProduct && ProductData.Maintainer!.UserName == principal.Identity?.Name) ||
+                  (isOfficialProduct && principal.IsInRole("Admin"));
+    }
+
+    private void EditProduct()
+    {
+        var targetProduct = DbContext.Products.First(p => p.Id == ProductData.Id);
+        
+        targetProduct.ImageUrl = Model.ImageUrl;
+        targetProduct.Name = Model.Name;
+        targetProduct.ShortDescription = Model.ShortDescription;
+        targetProduct.Price = Model.Price;
+        targetProduct.LongDescription = Model.LongDescription;
+        targetProduct.TechDescription = Model.TechDescription;
+        targetProduct.WarrantyDescription = Model.WarrantyDescription;
+        
+        try 
+        {
+            DbContext.SaveChanges();
+            _message = "Product updated successfully";
+            _alertClass = "alert-success";
+        }
+        catch (Exception e)
+        {
+            _message = $"An error occurred: {e.Message}";
+            _alertClass = "alert-danger";
+        }
+    }
+}

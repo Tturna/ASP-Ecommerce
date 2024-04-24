@@ -41,7 +41,18 @@ public class MaintainersController(ApplicationDbContext dbContext, UserManager<U
             return p;
         }).ToList();
 
-        return View("Individual", user);
+        var productsViewModel = new ProductsViewModel()
+        {
+            Products = user.MaintainerProducts.ToArray()
+        };
+        
+        var individualMaintainerViewModel= new IndividualMaintainerViewModel()
+        {
+            Maintainer = user,
+            ProductsViewModel = productsViewModel
+        };
+
+        return View("Individual", individualMaintainerViewModel);
     }
 
     [Authorize]

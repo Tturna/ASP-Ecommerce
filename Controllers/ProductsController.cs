@@ -31,7 +31,7 @@ public class ProductsController(ApplicationDbContext dbContext) : Controller
         var products = await dbContext
             .Products
             .Where(p => p.Maintainer != null)
-            .Include(p => p.Maintainer)
+            // .Include(p => p.Maintainer)
             .AsNoTracking()
             .ToArrayAsync();
 
@@ -56,9 +56,17 @@ public class ProductsController(ApplicationDbContext dbContext) : Controller
             return NotFound();
         }
         
+        // Remove circular reference so this object can be serialized and
+        // passed to a Razor component.
+        if (product.Maintainer != null)
+        {
+            product.Maintainer.MaintainerProducts = [];
+        }
+        
         return View(product);
     }
     
+    // TODO: Validate CSRF token.
     [Authorize]
     [HttpDelete]
     public IActionResult Delete(int? id)
@@ -87,60 +95,5 @@ public class ProductsController(ApplicationDbContext dbContext) : Controller
         dbContext.SaveChanges();
 
         return Ok();
-    }
-
-    [Authorize]
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if (id == null)
-        {
-            return BadRequest();
-        }
-        
-        var targetProduct = dbContext.Products
-            .Include(p => p.Maintainer)
-            .FirstOrDefault(p => p.Id == id);
-
-        if (targetProduct == null)
-        {
-            return NotFound();
-        }
-
-        var isMaintainerAndOwner = targetProduct.Maintainer != null &&
-                                targetProduct.Maintainer.UserName == User.Identity?.Name;
-
-        var isOfficialAndAdmin = targetProduct.Maintainer == null &&
-                                 User.IsInRole("Admin");
-        
-        if (!isMaintainerAndOwner && !isOfficialAndAdmin)
-        {
-            return Unauthorized();
-        }
-
-        var canUpdate = await TryUpdateModelAsync(
-            targetProduct,
-            string.Empty,
-            p => p.ImageUrl,
-            p => p.Name,
-            p => p.ShortDescription,
-            p => p.Price,
-            p => p.LongDescription,
-            p => p.TechDescription,
-            p => p.WarrantyDescription);
-        
-        if (!canUpdate)
-        {
-            return BadRequest();
-        }
-
-        try
-        {
-            await dbContext.SaveChangesAsync();
-            return RedirectToAction("Product", new { id = targetProduct.Id });
-        }
-        catch (Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
     }
 }

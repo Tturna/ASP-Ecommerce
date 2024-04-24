@@ -1,0 +1,153 @@
+﻿@using ASP_Ecommerce.Models.ViewModels
+@using System.Security.Claims
+@using ASP_Ecommerce.Models
+@using ASP_Ecommerce.Models.Enums
+@using ASP_Ecommerce.Services
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ApplicationDbContext DbContext
+@inject NavigationManager NavigationManager
+
+@if (_isOwner)
+{
+    <h3>Add Product</h3>
+
+    @if (_message != string.Empty)
+    {
+        <p class="alert @_alertClass">@_message</p>
+    }
+
+    <div>
+        @* TODO: Custom CSS *@
+        <EditForm Model="Model" OnValidSubmit="AddProduct" FormName="AddProduct" class="border-light">
+            @* Antiforgery stuff is added by default? *@
+            <DataAnnotationsValidator/>
+            <ValidationSummary class="text-danger"/>
+            <div class="d-flex flex-row flex-nowrap gap-3 mb-1">
+                <div class="w-50 form-floating">
+                    <label class="form-label text-muted pt-0">Product Name</label>
+                    <InputText @bind-Value="Model.Name" class="form-control"/>
+                </div>
+                <div class="w-50 form-floating">
+                    <label class="form-label text-muted pt-0">Short Description</label>
+                    <InputText @bind-Value="Model.ShortDescription" class="form-control"/>
+                </div>
+            </div>
+            <div class="d-flex flex-row flex-nowrap gap-3 mb-1">
+                <div class="w-50 form-floating">
+                    <label class="form-label text-muted pt-0">Price</label>
+                    <InputNumber @bind-Value="Model.Price" class="form-control"/>
+                </div>
+                <div class="w-50 form-floating">
+                    <label class="form-label text-muted pt-0">Category Path</label>
+                    <InputText @bind-Value="Model.CategoryPath" class="form-control"/>
+                </div>
+            </div>
+            <div class="d-flex flex-row flex-nowrap gap-3 mb-1">
+                <div class="w-50 form-floating">
+                    <label class="form-label text-muted pt-0">Image Url</label>
+                    <InputText @bind-Value="Model.ImageUrl" class="form-control"/>
+                </div>
+                <div class="w-50 form-floating">
+                    <button type="submit" class="btn btn-primary my-3">Add</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+}
+
+<div class="d-flex flex-row flex-wrap gap-3">
+    @foreach(var product in _products)
+    {
+        <div class="card mt-3" style="width: 18rem;">
+            <img src="@product.ImageUrl" class="card-img-top clickable" alt="@product.Name"
+                 onclick="@(() => Navigate($"/products/{product.Id}"))">
+                 
+            <div class="card-body">
+                <h5 class="card-title">@product.Name</h5>
+                <p class="card-text">@product.ShortDescription</p>
+                <p class="card-text">Price: @product.Price</p>
+                <button onclick="addItemToCart(@product.Id)" class="btn btn-primary">Add to cart</button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private ProductModel Model { get; set; } = new();
+    
+    [Parameter]
+    public ProductsViewModel InitialData { get; set; } = default!;
+    
+    [Parameter]
+    public UserModel? OwnerMaintainer { get; set; }
+    
+    [Parameter]
+    public ProductListType ListType { get; set; } = ProductListType.Undefined;
+
+    private ProductModel[] _products = default!;
+    private bool _isMaintainer;
+    private bool _isOwner;
+    private string _message = string.Empty;
+    private string _alertClass = string.Empty;
+    private ClaimsPrincipal _principal = default!;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        
+        if (InitialData == null)
+        {
+            throw new ArgumentNullException(nameof(InitialData), "ProductsViewModel must be passed to the component.");
+        }
+        
+        if (ListType == ProductListType.Undefined)
+        {
+            throw new ArgumentException("ListType must be defined.", nameof(ListType));
+        }
+        
+        _products = InitialData.Products;
+        _principal = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User;
+        _isMaintainer = _principal.IsInRole("Maintainer");
+        
+        _isOwner = ListType switch
+        {
+            ProductListType.Official => _principal.IsInRole("Admin"),
+            ProductListType.Individual => OwnerMaintainer != null && OwnerMaintainer?.UserName == _principal.Identity?.Name,
+            _ => false
+        };
+    }
+
+    
+    private async Task AddProduct()
+    {
+        // Product adding is done here because a controller would require a separate request
+        // which wouldn't be a problem if HttpClient included the Identity cookie.
+        // It can probably be added manually but it's not worth the effort rn. CBA.
+        try
+        {
+            if (_isMaintainer)
+            {
+                var user = DbContext.Users.First(u => u.UserName == _principal.Identity!.Name);
+                Model.Maintainer = user;
+                Model.MaintainerId = user.Id;
+            }
+            
+            _products = _products.Append(Model).ToArray();
+            await DbContext.Products.AddAsync(Model);
+            await DbContext.SaveChangesAsync();
+            _message = "Product added successfully!";
+            _alertClass = "alert-success";
+        }
+        catch (Exception e)
+        {
+            _message = e.Message;
+            _alertClass = "alert-danger";
+        }
+    }
+
+    private void Navigate(string path)
+    {
+        NavigationManager.NavigateTo(path, forceLoad: true);
+    }
+}
