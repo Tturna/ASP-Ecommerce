@@ -6,6 +6,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ApplicationDbContext DbContext
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 
 @if (_isOwner)
 {
@@ -60,13 +61,20 @@
     {
         <div class="card mt-3" style="width: 18rem;">
             <img src="@product.ImageUrl" class="card-img-top clickable" alt="@product.Name"
-                 onclick="@(() => Navigate($"/products/{product.Id}"))">
+                 @onclick="@(() => Navigate($"/products/{product.Id}"))">
                  
             <div class="card-body">
                 <h5 class="card-title">@product.Name</h5>
-                <p class="card-text">@product.ShortDescription</p>
+                @if (product.Maintainer != null)
+                {
+                    <p class="card-text">Maintainer: @product.Maintainer.UserName</p>
+                }
                 <p class="card-text">Price: @product.Price</p>
                 <button onclick="addItemToCart(@product.Id)" class="btn btn-primary">Add to cart</button>
+                @if (_isOwner)
+                {
+                    <button @onclick="@(() => DeleteProduct(@product.Id))" class="btn btn-danger ms-3">Delete</button>
+                }
             </div>
         </div>
     }
@@ -137,6 +145,32 @@
             await DbContext.Products.AddAsync(Model);
             await DbContext.SaveChangesAsync();
             _message = "Product added successfully!";
+            _alertClass = "alert-success";
+        }
+        catch (Exception e)
+        {
+            _message = e.Message;
+            _alertClass = "alert-danger";
+        }
+    }
+
+    private async Task DeleteProduct(int id)
+    {
+        // This might be unnecessary as the button may be able to just pass the tracked product directly to the method.
+        var targetProduct = DbContext.Products.First(p => p.Id == id);
+
+        var confirmed = await JsRuntime.InvokeAsync<bool>(
+            "confirm", 
+            $"Are you sure you want to delete {targetProduct.Name}?");
+
+        if (!confirmed) return;
+        
+        try
+        {
+            DbContext.Products.Remove(targetProduct);
+            _products = _products.Where(p => p.Id != id).ToArray();
+            await DbContext.SaveChangesAsync();
+            _message = "Product deleted successfully!";
             _alertClass = "alert-success";
         }
         catch (Exception e)
