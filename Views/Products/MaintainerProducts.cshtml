@@ -19,7 +19,7 @@
             <p class="card-text">@product.ShortDescription</p>
             <p class="card-text">Maintainer: @product.Maintainer!.UserName</p>
             <p class="card-text">Price: @product.Price</p>
-            <a href="#" class="btn btn-primary">Add to cart</a>
+            <button onclick="addItemToCart(@product.Id)" class="btn btn-primary">Add to cart</button>
         </div>
     </div>
 }

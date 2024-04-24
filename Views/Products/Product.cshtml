@@ -20,7 +20,7 @@
             <p>@Model.ShortDescription</p>
             <div class="d-flex flex-row flex-nowrap justify-content-start">
                 <h2 class="mx-3">@(Model.Price) €</h2>
-                <button class="btn btn-primary">Add to cart</button>
+                <button onclick="addItemToCart(@Model.Id)" class="btn btn-primary">Add to cart</button>
             </div>
         </div>
     </div>

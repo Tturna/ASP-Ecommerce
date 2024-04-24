@@ -1,0 +1,29 @@
+﻿@using Microsoft.IdentityModel.Tokens
+@model ASP_Ecommerce.Models.ViewModels.CartOverlayViewModel
+
+<div class="position-absolute shadow-sm w-25 top-0 end-0 d-flex flex-column flex-nowrap">
+    @if (Model.CartItems.IsNullOrEmpty())
+    {
+        <h3>Your cart is empty</h3>
+    }
+    else
+    {
+        <h3>Items in your cart</h3>
+        @foreach (var cartItem in Model.CartItems!)
+        {
+            <div class="w-100 d-flex flex-row flex-nowrap">
+                <img src="@cartItem.Product.ImageUrl" width="60" height="60" alt="@cartItem.Product.Name" />
+                <p class="w-50 text-truncate m-0">@cartItem.Product.Name</p>
+                <p class="shadow-sm m-0 p-2">@cartItem.Quantity</p>
+                <img src="icons/delete.svg" width="24" height="24" alt="delete" onclick="removeItemFromCart(@cartItem.Id)" />
+                <h4>@(cartItem.Product.Price) €</h4>
+            </div>
+        }
+        <div class="w-100 d-flex flex-row flex-nowrap">
+            <img src="icons/delete.svg" width="24" height="24" alt="empty cart" />
+            <h4>Empty cart</h4>
+            <h4>Total</h4>
+            <h4>@(Model.CartItems.Sum(ci => ci.Product.Price * ci.Quantity)) €</h4>
+        </div>
+    }
+</div>

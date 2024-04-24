@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - ASP_Ecommerce</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/ASP_Ecommerce.styles.css" asp-append-version="true"/>
+    @* <link rel="stylesheet" href="~/ASP_Ecommerce.styles.css" asp-append-version="true"/> *@
 </head>
 <body>
 <header>
@@ -31,11 +31,15 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Maintainers" asp-action="Index">Maintainers</a>
                     </li>
+                    <li class="nav-item ms-auto me-0">
+                        <img src="~/icons/cart.svg" alt="cart" width="24" height="24" onclick="toggleCart()" />
+                    </li>
                 </ul>
                 <partial name="_LoginPartial"/>
             </div>
         </div>
     </nav>
+    <div id="shoppingCart" class="position-relative" style="display: none"></div>
 </header>
 <div class="container">
     <main role="main" class="pb-3">
