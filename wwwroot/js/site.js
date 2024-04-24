@@ -10,6 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error:', error));
 });
 
+document.addEventListener('click', (e) => {
+    const cart = document.getElementById('shoppingCart');
+    
+    if (!cart.contains(e.target) && e.target.id !== 'cartButton') {
+        cart.style.display = 'none';
+    }
+});
+
 const toggleCart = () => {
     const cart = document.getElementById('shoppingCart');
     cart.style.display = cart.style.display === 'none' ? 'block' : 'none';
