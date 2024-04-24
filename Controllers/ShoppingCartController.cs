@@ -154,4 +154,81 @@ public class ShoppingCartController(ApplicationDbContext dbContext) : Controller
             return StatusCode(500, e.Message);
         }
     }
+
+    [Authorize]
+    public IActionResult RemoveAll(int? id)
+    {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+        
+        var user = dbContext.Users
+            .Include(u => u.ShoppingCart)
+            .ThenInclude(sc => sc.CartItems)
+            .ThenInclude(ci => ci.Product)
+            .First(u => u.UserName == User.Identity!.Name);
+        
+        if (user.ShoppingCart == null)
+        {
+            return NotFound();
+        }
+        
+        var item = user.ShoppingCart.CartItems.FirstOrDefault(i => i.Id == id);
+        
+        if (item == null)
+        {
+            return NotFound();
+        }
+        
+        user.ShoppingCart.CartItems.Remove(item);
+        
+        try
+        {
+            dbContext.SaveChanges();
+
+            var cartOverlayViewModel = new CartOverlayViewModel()
+            {
+                CartItems = user.ShoppingCart.CartItems.ToArray()
+            };
+            
+            return PartialView("_CartOverlay", cartOverlayViewModel);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [Authorize]
+    public IActionResult EmptyCart()
+    {
+        var user = dbContext.Users
+            .Include(u => u.ShoppingCart)
+            .ThenInclude(sc => sc.CartItems)
+            .First(u => u.UserName == User.Identity!.Name);
+        
+        if (user.ShoppingCart == null)
+        {
+            return NotFound();
+        }
+        
+        user.ShoppingCart.CartItems.Clear();
+        
+        try
+        {
+            dbContext.SaveChanges();
+
+            var cartOverlayViewModel = new CartOverlayViewModel()
+            {
+                CartItems = []
+            };
+            
+            return PartialView("_CartOverlay", cartOverlayViewModel);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
 }

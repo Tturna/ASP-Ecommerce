@@ -14,13 +14,19 @@
             <div class="w-100 d-flex flex-row flex-nowrap">
                 <img src="@cartItem.Product.ImageUrl" width="60" height="60" alt="@cartItem.Product.Name" />
                 <p class="w-50 text-truncate m-0">@cartItem.Product.Name</p>
-                <p class="shadow-sm m-0 p-2">@cartItem.Quantity</p>
-                <img src="icons/delete.svg" width="24" height="24" alt="delete" onclick="removeItemFromCart(@cartItem.Id)" />
+                <div class="d-flex flex-row flex-nowrap">
+                    <img src="~/icons/menu-left.svg" width="24" height="24" alt="decrease quantity"
+                         onclick="removeItemFromCart(@cartItem.Id)" />
+                    <p class="shadow-sm m-0 p-2">@cartItem.Quantity</p>
+                    <img src="~/icons/menu-right.svg" width="24" height="24" alt="increase quantity"
+                         onclick="addItemToCart(@cartItem.Product.Id)" />
+                </div>
+                <img src="icons/delete.svg" width="24" height="24" alt="delete" onclick="removeItemsFromCart(@cartItem.Id)" />
                 <h4>@(cartItem.Product.Price) €</h4>
             </div>
         }
         <div class="w-100 d-flex flex-row flex-nowrap">
-            <img src="icons/delete.svg" width="24" height="24" alt="empty cart" />
+            <img src="icons/delete.svg" width="24" height="24" alt="empty cart" onclick="emptyCart()" />
             <h4>Empty cart</h4>
             <h4>Total</h4>
             <h4>@(Model.CartItems.Sum(ci => ci.Product.Price * ci.Quantity)) €</h4>

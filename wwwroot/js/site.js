@@ -29,8 +29,25 @@ const removeItemFromCart = (id) => {
     fetch(`/ShoppingCart/Remove/${id}`)
         .then(response => response.text())
         .then(data => {
-            console.log(data);
             document.getElementById('shoppingCart').innerHTML = data;
         })
         .catch(error => console.error('Error:', error));
 };
+
+const removeItemsFromCart = (id) => {
+    fetch(`/ShoppingCart/RemoveAll/${id}`)
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('shoppingCart').innerHTML = data;
+        })
+        .catch(error => console.error('Error:', error))
+}
+
+const emptyCart = () => {
+    fetch('/ShoppingCart/EmptyCart')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('shoppingCart').innerHTML = data;
+        })
+        .catch(error => console.error('Error:', error));
+}
