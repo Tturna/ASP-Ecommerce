@@ -2,7 +2,15 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('/ShoppingCart/GetCart')
+    let cartDictJson = window.localStorage.getItem('cartDict');
+    
+    fetch('/ShoppingCart/GetCart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cartDictJson)
+    })
         .then(response => response.text())
         .then(data => {
             document.getElementById('shoppingCart').innerHTML = data;
@@ -11,6 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('click', (e) => {
+    if (e.target.id === 'logoutButton') {
+        window.localStorage.removeItem('cartDict');
+    }
+    
     const cart = document.getElementById('shoppingCart');
     
     if (!cart.contains(e.target) && e.target.id !== 'cartButton') {
@@ -24,34 +36,89 @@ const toggleCart = () => {
 };
 
 const addItemToCart = (id) => {
-    fetch(`/ShoppingCart/Add/${id}`)
+    let cartDictJson = window.localStorage.getItem('cartDict');
+    
+    if (cartDictJson === null)
+    {
+        cartDictJson = '{}';
+    }
+    
+    let cartDict = JSON.parse(cartDictJson);
+    
+    if (cartDict[id] === undefined)
+    {
+        cartDict[id] = 1;
+    }
+    else
+    {
+        cartDict[id]++;
+    }
+    
+    cartDictJson = JSON.stringify(cartDict);
+    window.localStorage.setItem('cartDict', cartDictJson);
+    
+    fetch(`/ShoppingCart/Add/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'ProductId': id,
+            'LocalStorageItemDictJson': cartDictJson
+        })
+    
+    })
         .then(response => response.text())
         .then(data => {
-            console.log(data);
             document.getElementById('shoppingCart').innerHTML = data;
         })
         .catch(error => console.error('Error:', error));
 };
 
-const removeItemFromCart = (id) => {
-    fetch(`/ShoppingCart/Remove/${id}`)
+const removeItemFromCart = (id, quantity = 1) => {
+    if (quantity === 0) return;
+    
+    let cartDictJson = window.localStorage.getItem('cartDict');
+    
+    if (cartDictJson !== null)
+    {
+        let cartDict = JSON.parse(cartDictJson);
+        
+        if (cartDict[id] !== undefined)
+        {
+            cartDict[id] -= quantity;
+            
+            if (quantity < 0 || cartDict[id] <= 0)
+            {
+                delete cartDict[id];
+            }
+        
+            cartDictJson = JSON.stringify(cartDict);
+            window.localStorage.setItem('cartDict', cartDictJson);
+        }
+    }
+    
+    fetch(`/ShoppingCart/Remove/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            ProductId: id,
+            Quantity: quantity,
+            LocalStorageItemDictJson: cartDictJson
+        })
+    })
         .then(response => response.text())
         .then(data => {
             document.getElementById('shoppingCart').innerHTML = data;
         })
         .catch(error => console.error('Error:', error));
 };
-
-const removeItemsFromCart = (id) => {
-    fetch(`/ShoppingCart/RemoveAll/${id}`)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('shoppingCart').innerHTML = data;
-        })
-        .catch(error => console.error('Error:', error))
-}
 
 const emptyCart = () => {
+    window.localStorage.removeItem('cartDict');
+    
     fetch('/ShoppingCart/EmptyCart')
         .then(response => response.text())
         .then(data => {

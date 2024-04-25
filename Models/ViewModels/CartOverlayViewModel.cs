@@ -2,5 +2,5 @@
 
 public class CartOverlayViewModel
 {
-    public required CartItemModel[]? CartItems { get; set; }
+    public required CartItemData[]? CartItemDatas { get; set; }
 }

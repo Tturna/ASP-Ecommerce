@@ -27,11 +27,13 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 builder.Services.AddServerSideBlazor();
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ShoppingCartService>();
 builder.Services.AddScoped(sp => 
     new HttpClient
     {
         BaseAddress = new Uri(builder.Configuration["BaseUrl"] ?? "http://localhost:5178/")
     });
+
 
 var app = builder.Build();
 
