@@ -31,6 +31,9 @@ public class ProductModel
 
     [Required, StringLength(100)]
     public string CategoryPath { get; set; } = string.Empty;
+    
+    public int? CategoryId { get; set; }
+    public CategoryModel? Category { get; set; }
 
     public int? MaintainerId { get; set; }
     public UserModel? Maintainer { get; set; }

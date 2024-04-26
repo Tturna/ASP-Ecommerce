@@ -3,6 +3,7 @@
 @using ASP_Ecommerce.Models
 @using ASP_Ecommerce.Models.Enums
 @using ASP_Ecommerce.Services
+@using Microsoft.EntityFrameworkCore
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ApplicationDbContext DbContext
 @inject NavigationManager NavigationManager
@@ -141,9 +142,41 @@
                 Model.MaintainerId = user.Id;
             }
             
-            _products = _products.Append(Model).ToArray();
+            var categoryNames = Model.CategoryPath.Split('/').Where(cn => cn.Length > 0).ToArray();
+            List<CategoryModel> categories = [];
+            var allCategories = DbContext.Categories
+                .Include(c => c.Parent)
+                .ToList();
+
+            for (var i = 0; i < categoryNames.Length; i++)
+            {
+                var categoryName = categoryNames[i];
+                var parentCategory = i > 0 ? categories.ElementAtOrDefault(i - 1) : null;
+                var category = allCategories
+                    .FirstOrDefault(c =>
+                        c.Name == categoryName &&
+                        (parentCategory == null || c.Parent?.Name == parentCategory.Name));
+                
+                if (category == null)
+                {
+                    category = new CategoryModel
+                    {
+                        Name = categoryName,
+                        Parent = parentCategory
+                    };
+                    
+                    await DbContext.Categories.AddAsync(category);
+                }
+                
+                categories.Add(category);
+            }
+
+            var mostSpecificCategory = categories.LastOrDefault();
+            Model.Category = mostSpecificCategory;
+            
             await DbContext.Products.AddAsync(Model);
             await DbContext.SaveChangesAsync();
+            _products = _products.Append(Model).ToArray();
             _message = "Product added successfully!";
             _alertClass = "alert-success";
         }

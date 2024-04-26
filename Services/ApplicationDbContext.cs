@@ -10,6 +10,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     // Users DbSet is provided by IdentityDbContext
     public DbSet<ProductModel> Products { get; set; } = default!;
+    public DbSet<CategoryModel> Categories { get; set; } = default!;
     public DbSet<OrderModel> Orders { get; set; } = default!;
     public DbSet<OrderItemModel> OrderItems { get; set; } = default!;
     public DbSet<ShoppingCartModel> ShoppingCarts { get; set; } = default!;
