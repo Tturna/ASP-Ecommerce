@@ -16,10 +16,17 @@ public class ProductsController(ApplicationDbContext dbContext) : Controller
             .Where(p => p.Maintainer == null)
             .AsNoTracking()
             .ToArrayAsync();
+        
+        var categories = await dbContext.Categories
+            .Include(c => c.Parent)
+            .ThenInclude(c => c.Parent)
+            .AsNoTracking()
+            .ToArrayAsync();
 
         var productsViewModel = new ProductsViewModel()
         {
-            Products = products
+            Products = products,
+            Categories = categories
         };
         
         return View(productsViewModel);

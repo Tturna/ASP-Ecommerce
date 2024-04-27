@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ASP_Ecommerce.Validators;
 
 namespace ASP_Ecommerce.Models;
 
@@ -29,7 +30,7 @@ public class ProductModel
     [Required, StringLength(200)]
     public string ImageUrl { get; set; } = string.Empty;
 
-    [Required, StringLength(100)]
+    [Required, StringLength(100), ValidCategoryPath]
     public string CategoryPath { get; set; } = string.Empty;
     
     public int? CategoryId { get; set; }

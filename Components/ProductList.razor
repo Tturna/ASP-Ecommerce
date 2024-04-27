@@ -9,6 +9,27 @@
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime
 
+<div class="categorySelection w-100 d-flex flex-row flex-nowrap gap-3">
+    @foreach(var topCategory in _categories.Where(c => c.Parent == null))
+    {
+        <div class="category d-flex flex-column flex-nowrap">
+            <h3>@topCategory.Name</h3>
+            <ul>
+                @foreach(var subCategory in _categories.Where(c => c.ParentId == topCategory.Id))
+                {
+                    <li><h4>@subCategory.Name</h4></li>
+                    <ul>
+                        @foreach (var subSubCategory in _categories.Where(c => c.ParentId == subCategory.Id))
+                        {
+                            <li><h5>@subSubCategory.Name</h5></li>
+                        }
+                    </ul>
+                }
+            </ul>
+        </div>
+    }
+</div>
+
 @if (_isOwner)
 {
     <h3>Add Product</h3>
@@ -95,6 +116,7 @@
     public ProductListType ListType { get; set; } = ProductListType.Undefined;
 
     private ProductModel[] _products = default!;
+    private CategoryModel[] _categories = default!;
     private bool _isMaintainer;
     private bool _isOwner;
     private string _message = string.Empty;
@@ -116,6 +138,7 @@
         }
         
         _products = InitialData.Products;
+        _categories = InitialData.Categories;
         _principal = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User;
         _isMaintainer = _principal.IsInRole("Maintainer");
         
