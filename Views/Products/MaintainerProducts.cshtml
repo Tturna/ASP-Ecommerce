@@ -7,8 +7,12 @@
     Layout = "_Layout";
 }
 
-<h1>Maintainer Products</h1>
+<div class="top-banner top-banner-tertiary">
+    <h1 class="rubik-black-italic c-light">SUPPORT YOUR LOCAL MAINTAINERS</h1>
+</div>
 
-<component type="typeof(ProductList)" render-mode="Server"
-           param-InitialData="@Model"
-           param-ListType="@ProductListType.Maintainer"/>
+<div class="content">
+    <component type="typeof(ProductList)" render-mode="Server"
+               param-InitialData="@Model"
+               param-ListType="@ProductListType.Maintainer"/>
+</div>

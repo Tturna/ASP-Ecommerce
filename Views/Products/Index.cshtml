@@ -6,8 +6,12 @@
     Layout = "_Layout";
 }
 
-<h1>Find your new phone</h1>
+<div class="top-banner">
+    <h1 class="rubik-black-italic c-light">FIND YOUR NEW PHONE</h1>
+</div>
 
-<component type="typeof(ProductList)" render-mode="Server"
-           param-InitialData="@Model"
-           param-ListType="@ProductListType.Official"/>
+<div class="content">
+    <component type="typeof(ProductList)" render-mode="Server"
+               param-InitialData="@Model"
+               param-ListType="@ProductListType.Official"/>
+</div>

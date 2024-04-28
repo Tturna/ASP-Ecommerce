@@ -10,71 +10,70 @@
 
 @if (!_isOwner)
 {
-    <div class="w-100 d-flex flex-row flex-nowrap">
-        <div class="w-50">
-            <img src="@ProductData.ImageUrl" alt="@ProductData.Name" class="img-fluid">
-        </div> 
-        <div class="w-50">
-            <h2>@ProductData.Name</h2>
+    <p><strong>@ProductData.CategoryPath</strong></p>
+    <div class="product-main-block">
+        <img src="@ProductData.ImageUrl" alt="@ProductData.Name" class="">
+        <div class="product-main-text">
+            <h1 class="rubik-mono-one-regular">@ProductData.Name</h1>
             <p>Score here</p>
             <p>@ProductData.ShortDescription</p>
-            <div class="d-flex flex-row flex-nowrap justify-content-start">
-                <h2 class="mx-3">@(ProductData.Price) €</h2>
+            <div class="product-price-cart">
+                <h2 class="">@(ProductData.Price) €</h2>
                 <button onclick="addItemToCart(@ProductData.Id)" class="btn btn-primary">Add to cart</button>
             </div>
         </div>
     </div>
     
-    <h3>Product description</h3>
-    <p>@Model.LongDescription</p>
-    <h3>Technical specification</h3>
-    <p>@Model.TechDescription</p>
-    <h3>Warranty information</h3>
-    <p>@Model.WarrantyDescription</p>
+    <div class="product-descriptions">
+        <h2>Product description</h2>
+        <p>@Model.LongDescription</p>
+        <h2>Technical specification</h2>
+        <p>@Model.TechDescription</p>
+        <h2>Warranty information</h2>
+        <p>@Model.WarrantyDescription</p>
+    </div>
 }
 else
 {
     <EditForm Model="Model" OnValidSubmit="EditProduct" FormName="EditProductForm">
         <ValidationSummary />
-        <div class="form-group">
-            <label class="form-label">Image URL</label>
-            <InputText @bind-Value="Model.ImageUrl" class="form-control"/>
+        <div class="">
+            <label class="">Image URL</label>
+            <InputText @bind-Value="Model.ImageUrl" class=""/>
         </div>
-        <div class="form-group">
-            <label class="form-label">Name</label>
-            <InputText @bind-Value="Model.Name" class="form-control"/>
+        <div class="">
+            <label class="">Name</label>
+            <InputText @bind-Value="Model.Name" class=""/>
         </div>
-        <div class="form-group">
-            <label class="form-label">Short description</label>
-            <InputText @bind-Value="Model.ShortDescription" class="form-control"/>
+        <div class="">
+            <label class="">Short description</label>
+            <InputText @bind-Value="Model.ShortDescription" class=""/>
         </div>
-        <div class="form-group">
-            <label class="form-label">Price</label>
-            <InputNumber @bind-Value="Model.Price" class="form-control"/>
+        <div class="">
+            <label class="">Price</label>
+            <InputNumber @bind-Value="Model.Price" class=""/>
         </div>
-        <div class="form-group">
-            <label class="form-label">Long description</label>
-            <InputText @bind-Value="Model.LongDescription" class="form-control"/>
+        <div class="">
+            <label class="">Long description</label>
+            <InputText @bind-Value="Model.LongDescription" class=""/>
         </div>
-        <div class="form-group">
-            <label class="form-label">Technical description</label>
-            <InputText @bind-Value="Model.TechDescription" class="form-control"/>
+        <div class="">
+            <label class="">Technical description</label>
+            <InputText @bind-Value="Model.TechDescription" class=""/>
         </div>
-        <div class="form-group">
-            <label class="form-label">Warranty description</label>
-            <InputText @bind-Value="Model.WarrantyDescription" class="form-control"/>
+        <div class="">
+            <label class="">Warranty description</label>
+            <InputText @bind-Value="Model.WarrantyDescription" class=""/>
         </div>
-        <button type="submit" class="btn btn-primary my-3">Save</button>
+        <button type="submit" class="">Save</button>
     </EditForm>
 }
 
 @code {
-    [SupplyParameterFromForm]
-    public ProductModel Model { get; set; } = new();
-    
-    [Parameter]
-    public ProductModel ProductData { get; set; } = default!;
-    
+    [SupplyParameterFromForm] public ProductModel Model { get; set; } = new();
+
+    [Parameter] public ProductModel ProductData { get; set; } = default!;
+
     private string _message = string.Empty;
     private string _alertClass = string.Empty;
     private bool _isOwner;
@@ -88,15 +87,15 @@ else
 
         var principal = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User;
         var isOfficialProduct = ProductData.Maintainer == null;
-        
+
         _isOwner = (!isOfficialProduct && ProductData.Maintainer!.UserName == principal.Identity?.Name) ||
-                  (isOfficialProduct && principal.IsInRole("Admin"));
+                   (isOfficialProduct && principal.IsInRole("Admin"));
     }
 
     private void EditProduct()
     {
         var targetProduct = DbContext.Products.First(p => p.Id == ProductData.Id);
-        
+
         targetProduct.ImageUrl = Model.ImageUrl;
         targetProduct.Name = Model.Name;
         targetProduct.ShortDescription = Model.ShortDescription;
@@ -104,8 +103,8 @@ else
         targetProduct.LongDescription = Model.LongDescription;
         targetProduct.TechDescription = Model.TechDescription;
         targetProduct.WarrantyDescription = Model.WarrantyDescription;
-        
-        try 
+
+        try
         {
             DbContext.SaveChanges();
             _message = "Product updated successfully";

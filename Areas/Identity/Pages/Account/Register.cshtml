@@ -1,79 +1,69 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Sign up";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<div class="row">
-    <div class="col-md-4">
+<div class="login-section">
+    <div class="login-side">
+        <h1 class="gr-text-primary rubik-mono-one-regular">@ViewData["Title"]</h1>
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create an account</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.FirstName" class="form-control" autocomplete="firstname" aria-required="true" placeholder="John" />
-                <label asp-for="Input.FirstName">First name (optional)</label>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            <div asp-validation-summary="ModelOnly" class="c-primary" role="alert"></div>
+            <div>
+                <span asp-validation-for="Input.FirstName" class="c-primary"></span>
+                <input asp-for="Input.FirstName" class="rubik-strong-menu" autocomplete="firstname" aria-required="true" placeholder="First name" />
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.LastName" class="form-control" autocomplete="lastname" aria-required="true" placeholder="Adams" />
-                <label asp-for="Input.LastName">Last name (optional)</label>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            <div>
+                <span asp-validation-for="Input.LastName" class="c-primary"></span>
+                <input asp-for="Input.LastName" class="rubik-strong-menu" autocomplete="lastname" aria-required="true" placeholder="Last name" />
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="Username" />
-                <label asp-for="Input.UserName">Username</label>
-                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            <div>
+                <span asp-validation-for="Input.UserName" class="c-primary"></span>
+                <input asp-for="Input.UserName" class="rubik-strong-menu" autocomplete="username" aria-required="true" placeholder="Username" />
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <div>
+                <span asp-validation-for="Input.Email" class="c-primary"></span>
+                <input asp-for="Input.Email" class="rubik-strong-menu" autocomplete="email" aria-required="true" placeholder="Email" />
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <div>
+                <span asp-validation-for="Input.Password" class="c-primary"></span>
+                <input asp-for="Input.Password" class="rubik-strong-menu" autocomplete="new-password" aria-required="true" placeholder="Password" />
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            <div>
+                <span asp-validation-for="Input.ConfirmPassword" class="c-primary"></span>
+                <input asp-for="Input.ConfirmPassword" class="rubik-strong-menu" autocomplete="new-password" aria-required="true" placeholder="Repeat password" />
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
+            <button id="registerSubmit" type="submit" class="btn gr-primary btn-primary rubik-mono-one-regular">Register</button>
+        </form><br/>
+        <p class="rubik-strong-menu">Already have an account?</p>
+        <p><a asp-page="./Login" class="btn btn-tertiary no-border rubik-mono-one-regular">Login</a></p>
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
+    <div class="login-side">
+        <h3>Use another service to register.</h3>
+        @{
+            if ((Model.ExternalLogins?.Count ?? 0) == 0)
+            {
+                <div>
+                    <p>
+                        There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                        about setting up this ASP.NET application to support logging in via external services</a>.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
                     <div>
                         <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
+                            @foreach (var provider in Model.ExternalLogins!)
+                            {
+                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                            }
                         </p>
                     </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
+                </form>
             }
-        </section>
+        }
     </div>
 </div>
 

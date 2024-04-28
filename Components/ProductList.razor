@@ -9,11 +9,11 @@
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime
 
-<div class="categorySelection w-100 d-flex flex-row flex-nowrap gap-3">
+<div class="category-section">
     @foreach(var topCategory in _categories.Where(c => c.Parent == null))
     {
-        <div class="category d-flex flex-column flex-nowrap">
-            <h3>@topCategory.Name</h3>
+        <div class="category">
+            <button class="btn btn-small btn-tertiary-light">@topCategory.Name</button>
             <ul>
                 @foreach(var subCategory in _categories.Where(c => c.ParentId == topCategory.Id))
                 {
@@ -32,70 +32,82 @@
 
 @if (_isOwner)
 {
-    <h3>Add Product</h3>
+    <div class="add-product">
+        <h3>Add Product</h3>
 
-    @if (_message != string.Empty)
-    {
-        <p class="alert @_alertClass">@_message</p>
-    }
-
-    <div>
-        @* TODO: Custom CSS *@
-        <EditForm Model="Model" OnValidSubmit="AddProduct" FormName="AddProduct" class="border-light">
+        @if (_message != string.Empty)
+        {
+            <p class="alert @_alertClass">@_message</p>
+        }
+        <EditForm Model="Model" OnValidSubmit="AddProduct" FormName="AddProduct">
             @* Antiforgery stuff is added by default? *@
             <DataAnnotationsValidator/>
-            <ValidationSummary class="text-danger"/>
-            <div class="d-flex flex-row flex-nowrap gap-3 mb-1">
-                <div class="w-50 form-floating">
-                    <label class="form-label text-muted pt-0">Product Name</label>
-                    <InputText @bind-Value="Model.Name" class="form-control"/>
+            <ValidationSummary class="c-primary"/>
+            <div class="add-product-row">
+                <div>
+                    <label>Product Name</label>
+                    <InputText @bind-Value="Model.Name" />
                 </div>
-                <div class="w-50 form-floating">
-                    <label class="form-label text-muted pt-0">Short Description</label>
-                    <InputText @bind-Value="Model.ShortDescription" class="form-control"/>
+                <div>
+                    <label>Short Description</label>
+                    <InputText @bind-Value="Model.ShortDescription"/>
                 </div>
-            </div>
-            <div class="d-flex flex-row flex-nowrap gap-3 mb-1">
-                <div class="w-50 form-floating">
-                    <label class="form-label text-muted pt-0">Price</label>
-                    <InputNumber @bind-Value="Model.Price" class="form-control"/>
-                </div>
-                <div class="w-50 form-floating">
-                    <label class="form-label text-muted pt-0">Category Path</label>
-                    <InputText @bind-Value="Model.CategoryPath" class="form-control"/>
+                <div>
+                    <label>Price</label>
+                    <InputNumber @bind-Value="Model.Price"/>
                 </div>
             </div>
-            <div class="d-flex flex-row flex-nowrap gap-3 mb-1">
-                <div class="w-50 form-floating">
-                    <label class="form-label text-muted pt-0">Image Url</label>
-                    <InputText @bind-Value="Model.ImageUrl" class="form-control"/>
+            <div class="add-product-row">
+                <div>
+                    <label>Category Path</label>
+                    <InputText @bind-Value="Model.CategoryPath"/>
                 </div>
-                <div class="w-50 form-floating">
-                    <button type="submit" class="btn btn-primary my-3">Add</button>
+                <div>
+                    <label>Image Url</label>
+                    <InputText @bind-Value="Model.ImageUrl"/>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-small btn-primary">Add</button>
                 </div>
             </div>
         </EditForm>
     </div>
 }
 
-<div class="d-flex flex-row flex-wrap gap-3">
+<div class="product-list">
     @foreach(var product in _products)
     {
-        <div class="card mt-3" style="width: 18rem;">
-            <img src="@product.ImageUrl" class="card-img-top clickable" alt="@product.Name"
+        <div class="product-card">
+            <img src="@product.ImageUrl" class="product-card-img clickable" alt="@product.Name"
                  @onclick="@(() => Navigate($"/products/{product.Id}"))">
                  
-            <div class="card-body">
-                <h5 class="card-title">@product.Name</h5>
+            <div class="product-card-body">
                 @if (product.Maintainer != null)
                 {
-                    <p class="card-text">Maintainer: @product.Maintainer.UserName</p>
+                    <p class="rubik-strong-menu">@product.Maintainer.UserName</p>
                 }
-                <p class="card-text">Price: @product.Price</p>
-                <button onclick="addItemToCart(@product.Id)" class="btn btn-primary">Add to cart</button>
+                
+                <p class="rubik-regular">@product.Name</p>
+                
+                @if (ListType == ProductListType.Official)
+                {
+                    <div class="product-stars-price">
+                        <div class="review-stars">
+                            <img src="icons/star.svg" alt="star">
+                            <img src="icons/star.svg" alt="star">
+                            <img src="icons/star.svg" alt="star">
+                            <img src="icons/star-outline.svg" alt="star">
+                            <img src="icons/star-outline.svg" alt="star">
+                        </div>
+                        <p class="rubik-strong-menu">@(product.Price) €</p>
+                    </div>
+                }
+                
+                @* <button onclick="addItemToCart(@product.Id)" class="btn btn-primary">Add to cart</button> *@
+                
                 @if (_isOwner)
                 {
-                    <button @onclick="@(() => DeleteProduct(@product.Id))" class="btn btn-danger ms-3">Delete</button>
+                    <button @onclick="@(() => DeleteProduct(@product.Id))" class="btn btn-primary">Delete</button>
                 }
             </div>
         </div>
@@ -103,17 +115,13 @@
 </div>
 
 @code {
-    [SupplyParameterFromForm]
-    private ProductModel Model { get; set; } = new();
-    
-    [Parameter]
-    public ProductsViewModel InitialData { get; set; } = default!;
-    
-    [Parameter]
-    public UserModel? OwnerMaintainer { get; set; }
-    
-    [Parameter]
-    public ProductListType ListType { get; set; } = ProductListType.Undefined;
+    [SupplyParameterFromForm] private ProductModel Model { get; set; } = new();
+
+    [Parameter] public ProductsViewModel InitialData { get; set; } = default!;
+
+    [Parameter] public UserModel? OwnerMaintainer { get; set; }
+
+    [Parameter] public ProductListType ListType { get; set; } = ProductListType.Undefined;
 
     private ProductModel[] _products = default!;
     private CategoryModel[] _categories = default!;
@@ -126,22 +134,22 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        
+
         if (InitialData == null)
         {
             throw new ArgumentNullException(nameof(InitialData), "ProductsViewModel must be passed to the component.");
         }
-        
+
         if (ListType == ProductListType.Undefined)
         {
             throw new ArgumentException("ListType must be defined.", nameof(ListType));
         }
-        
+
         _products = InitialData.Products;
         _categories = InitialData.Categories;
         _principal = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User;
         _isMaintainer = _principal.IsInRole("Maintainer");
-        
+
         _isOwner = ListType switch
         {
             ProductListType.Official => _principal.IsInRole("Admin"),
@@ -150,7 +158,7 @@
         };
     }
 
-    
+
     private async Task AddProduct()
     {
         // Product adding is done here because a controller would require a separate request
@@ -164,7 +172,7 @@
                 Model.Maintainer = user;
                 Model.MaintainerId = user.Id;
             }
-            
+
             var categoryNames = Model.CategoryPath.Split('/').Where(cn => cn.Length > 0).ToArray();
             List<CategoryModel> categories = [];
             var allCategories = DbContext.Categories
@@ -179,7 +187,7 @@
                     .FirstOrDefault(c =>
                         c.Name == categoryName &&
                         (parentCategory == null || c.Parent?.Name == parentCategory.Name));
-                
+
                 if (category == null)
                 {
                     category = new CategoryModel
@@ -187,16 +195,16 @@
                         Name = categoryName,
                         Parent = parentCategory
                     };
-                    
+
                     await DbContext.Categories.AddAsync(category);
                 }
-                
+
                 categories.Add(category);
             }
 
             var mostSpecificCategory = categories.LastOrDefault();
             Model.Category = mostSpecificCategory;
-            
+
             await DbContext.Products.AddAsync(Model);
             await DbContext.SaveChangesAsync();
             _products = _products.Append(Model).ToArray();
@@ -216,11 +224,11 @@
         var targetProduct = DbContext.Products.First(p => p.Id == id);
 
         var confirmed = await JsRuntime.InvokeAsync<bool>(
-            "confirm", 
+            "confirm",
             $"Are you sure you want to delete {targetProduct.Name}?");
 
         if (!confirmed) return;
-        
+
         try
         {
             DbContext.Products.Remove(targetProduct);

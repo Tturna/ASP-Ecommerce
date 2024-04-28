@@ -1,35 +1,40 @@
 ﻿@using Microsoft.IdentityModel.Tokens
 @model ASP_Ecommerce.Models.ViewModels.CartOverlayViewModel
 
-<div class="position-absolute shadow-sm w-25 top-0 end-0 d-flex flex-column flex-nowrap">
+<div class="shopping-cart">
     @if (Model.CartItemDatas.IsNullOrEmpty())
     {
-        <h3>Your cart is empty</h3>
+        <strong>Your cart is empty</strong>
     }
     else
     {
-        <h3>Items in your cart</h3>
+        <div class="cart-row">
+            <strong>Items in your cart</strong>
+        </div>
         @foreach (var itemData in Model.CartItemDatas!)
         {
-            <div class="w-100 d-flex flex-row flex-nowrap">
+            <div class="cart-row">
                 <img src="@itemData.Product.ImageUrl" width="60" height="60" alt="@itemData.Product.Name" />
-                <p class="w-50 text-truncate m-0">@itemData.Product.Name</p>
-                <div class="d-flex flex-row flex-nowrap">
+                <p class="">@itemData.Product.Name</p>
+                <div class="cart-row">
                     <img src="~/icons/menu-left.svg" width="24" height="24" alt="decrease quantity"
                          onclick="removeItemFromCart(@itemData.ProductId)" />
-                    <p class="shadow-sm m-0 p-2">@itemData.Quantity</p>
+                    <p class="">@itemData.Quantity</p>
                     <img src="~/icons/menu-right.svg" width="24" height="24" alt="increase quantity"
                          onclick="addItemToCart(@itemData.ProductId)" />
                 </div>
                 <img src="icons/delete.svg" width="24" height="24" alt="delete" onclick="removeItemFromCart(@itemData.ProductId, -1)" />
-                <h4>@(itemData.Product.Price) €</h4>
+                <strong>@(itemData.Product.Price) €</strong>
             </div>
         }
-        <div class="w-100 d-flex flex-row flex-nowrap">
-            <img src="icons/delete.svg" width="24" height="24" alt="empty cart" onclick="emptyCart()" />
-            <h4>Empty cart</h4>
-            <h4>Total</h4>
-            <h4>@(Model.CartItemDatas.Sum(ci => ci.Product.Price * ci.Quantity)) €</h4>
+        <div class="cart-row">
+            <div class="cart-row">
+                <img src="icons/delete.svg" width="24" height="24" alt="empty cart" onclick="emptyCart()"/>
+                <strong>Empty cart</strong>
+            </div>
+            <strong>Total</strong>
+            <strong>@(Model.CartItemDatas.Sum(ci => ci.Product.Price * ci.Quantity)) €</strong>
         </div>
+        <button class="btn btn-small btn-primary">Checkout</button>
     }
 </div>

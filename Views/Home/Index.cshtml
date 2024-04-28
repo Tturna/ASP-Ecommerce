@@ -1,8 +1,52 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="content">
+    <div class="featured-section">
+        <div class="featured-block featured-text-block">
+            <h1 class="rubik-mono-one-regular c-dark">Explore<br/> <span class="gr-text-primary">official</span><br/> products</h1>
+            <p>Some text here</p>
+            <button class="btn btn-primary">Products</button>
+        </div>
+        
+        <div class="featured-block featured-item-block">
+            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        </div>
+        
+        <div class="featured-block featured-item-block">
+            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        </div>
+        
+        <div class="featured-block featured-item-block">
+            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        </div>
+    </div>
+
+    <div class="featured-section">
+        <div class="featured-block featured-item-block">
+            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        </div>
+        
+        <div class="featured-block featured-text-block">
+            <h1 class="rubik-mono-one-regular c-dark">Explore<br/> <span class="gr-text-tertiary">maintainer</span><br/> products</h1>
+            <p>Some text here</p>
+            <button class="btn btn-tertiary" asp-controller="Products" asp-action="MaintainerProducts">Products</button>
+            <button class="btn btn-tertiary-light">Services</button>
+        </div>
+        
+        <div class="featured-block featured-item-block">
+            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        </div>
+        
+        <div class="featured-block featured-item-block">
+            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        </div>
+    </div>
+
+    <button asp-controller="Maintainers" asp-action="Register" class="btn btn-huge gr-primary rubik-mono-one-regular">Become a maintainer</button>
+
+    <h1 class="rubik-mono-one-regular">Get it cheaper from a <span class="gr-text-tertiary">maintainer</span></h1>
+    <p>Some text here</p>
+    <button asp-controller="Maintainers" asp-action="Index" class="btn btn-tertiary">Maintainers</button>
 </div>
