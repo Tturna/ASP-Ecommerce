@@ -16,6 +16,10 @@
 /*  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;*/
 /*}*/
 
+p, h1, h2, h3, h4, h5, h6, a, button, input, label, li, span, td, th {
+  color: var(--color-dark);
+}
+
 html {
   min-height: 100vh;
   font-family: "Rubik", sans-serif;
