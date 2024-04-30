@@ -34,7 +34,6 @@ builder.Services.AddScoped(sp =>
         BaseAddress = new Uri(builder.Configuration["BaseUrl"] ?? "http://localhost:5178/")
     });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

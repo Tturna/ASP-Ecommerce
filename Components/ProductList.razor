@@ -115,13 +115,17 @@
 </div>
 
 @code {
-    [SupplyParameterFromForm] private ProductModel Model { get; set; } = new();
+    [SupplyParameterFromForm]
+    private ProductModel Model { get; set; } = new();
 
-    [Parameter] public ProductsViewModel InitialData { get; set; } = default!;
+    [Parameter]
+    public ProductsViewModel InitialData { get; set; } = default!;
 
-    [Parameter] public UserModel? OwnerMaintainer { get; set; }
+    [Parameter]
+    public UserModel? OwnerMaintainer { get; set; }
 
-    [Parameter] public ProductListType ListType { get; set; } = ProductListType.Undefined;
+    [Parameter]
+    public ProductListType ListType { get; set; } = ProductListType.Undefined;
 
     private ProductModel[] _products = default!;
     private CategoryModel[] _categories = default!;

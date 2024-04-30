@@ -34,6 +34,9 @@ public class UserModel : IdentityUser<int>
     [StringLength(100)]
     public string? FeaturedMaintainerMessage { get; set; }
     
+    public decimal MaintainerLatitude { get; set; }
+    public decimal MaintainerLongitude { get; set; }
+    
     [Required]
     public DateTime CreatedAt { get; set; }
     

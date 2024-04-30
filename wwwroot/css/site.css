@@ -454,6 +454,27 @@ footer a {
   font-style: normal;
 }
 
+.map-section {
+width: 100%;
+  margin: 2rem auto;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#map {
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+}
+
+.map-side {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  text-align: center;
+}
+
 .c-primary {
   color: var(--color-primary);
 }

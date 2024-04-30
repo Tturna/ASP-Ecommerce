@@ -9,7 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ASP_Ecommerce.Controllers;
 
-public class MaintainersController(ApplicationDbContext dbContext, UserManager<UserModel> userManager) : Controller
+public class MaintainersController(ApplicationDbContext dbContext,
+    UserManager<UserModel> userManager,
+    HttpClient httpClient,
+    IConfiguration config) : Controller
 {
     public IActionResult Index(int? id)
     {
@@ -20,7 +23,13 @@ public class MaintainersController(ApplicationDbContext dbContext, UserManager<U
                 .AsNoTracking()
                 .ToArray();
             
-            return View(maintainers);
+            var maintainersViewModel = new MaintainersViewModel()
+            {
+                Maintainers = maintainers,
+                GeocodingUrl = $"https://us1.locationiq.com/v1/search?key={config["LIQ_KEY"]}&q={{address}}&format=json"
+            };
+            
+            return View(maintainersViewModel);
         }
         
         var user = dbContext.Users
@@ -62,7 +71,7 @@ public class MaintainersController(ApplicationDbContext dbContext, UserManager<U
     }
 
     [HttpPost, Authorize, ValidateAntiForgeryToken]
-    public IActionResult Register([FromForm] BecomeMaintainerViewModel newMaintainerData)
+    public async Task<IActionResult> Register([FromForm] BecomeMaintainerViewModel newMaintainerData)
     {
         if (!ModelState.IsValid)
         {
@@ -72,13 +81,30 @@ public class MaintainersController(ApplicationDbContext dbContext, UserManager<U
         // user can't be null because of the [Authorize] attribute
         var user = dbContext.Users.First(u => u.UserName == User.Identity!.Name);
 
-        userManager.AddToRoleAsync(user, Enum.GetName(UserRole.Maintainer)!);
+        await userManager.AddToRoleAsync(user, Enum.GetName(UserRole.Maintainer)!);
         user.MaintainerAddress = newMaintainerData.MaintainerAddress;
         user.City = newMaintainerData.City;
         user.PostalCode = newMaintainerData.PostalCode;
         user.Country = newMaintainerData.Country;
+
+        var fulladdress = $"{user.MaintainerAddress}, {user.City}, {user.PostalCode}, {user.Country}";
+        var uriAddress = Uri.EscapeDataString(fulladdress);
+        var apikey = config["LIQ_KEY"];
+        var uri = $"https://us1.locationiq.com/v1/search?key={apikey}&q={uriAddress}&format=json";
+        var result = await httpClient.GetAsync(uri);
+        var json = await result.Content.ReadAsStringAsync();
+        
+        var latIndex = json.IndexOf("\"lat\":") + 7;
+        var latEndIndex = json.IndexOf(",", latIndex) - 1;
+        var lat = json.Substring(latIndex, latEndIndex - latIndex);
+        var lonIndex = json.IndexOf("\"lon\":") + 7;
+        var lonEndIndex = json.IndexOf(",", lonIndex) - 1;
+        var lon = json.Substring(lonIndex, lonEndIndex - lonIndex);
+
+        user.MaintainerLatitude = decimal.Parse(lat);
+        user.MaintainerLongitude = decimal.Parse(lon);
             
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
         
         return RedirectToAction("Index", new { id = user.Id });
     }
