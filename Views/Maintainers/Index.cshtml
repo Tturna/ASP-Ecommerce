@@ -18,86 +18,94 @@
     <h1 class="rubik-black-italic c-light">FEATURED MAINTAINERS</h1>
 </div>
 
-<div class="map-section">
-    <div class="featured-block featured-text-block">
-        <h1 class="rubik-mono-one-regular c-dark">Find<br/> <span class="gr-text-tertiary">maintainers</span><br/> near you</h1>
-        <p>Some text here</p>
-    </div>
-    <div class="map-side">
-        <form id="map-search">
-            <input type="text" id="search" placeholder="Address">
-            <button type="submit">Search</button>
-        </form>
-        <div id="map" style="width: 500px; height: 300px"></div>
-    </div>
-</div>
-
-<script>
-    let maintainersString = '@Html.Raw(Json.Serialize(Model.Maintainers.Select(m => new {
-        m.FirstName,
-        m.LastName,
-        m.UserName,
-        m.MaintainerAddress,
-        m.City,
-        m.PostalCode,
-        m.MaintainerServices,
-        m.MaintainerLatitude,
-        m.MaintainerLongitude
-    })))';
-    let maintainers = JSON.parse(maintainersString);
-    let map = L.map('map').setView([60.1699, 24.9384], 13);
-    
-    for (let maintainer of maintainers) {
-        if (maintainer.maintainerLatitude === 0 || maintainer.maintainerLongitude === 0) {
-            continue;
-        }
-        
-        let latlon = [maintainer.maintainerLatitude, maintainer.maintainerLongitude];
-        let marker = L.marker(latlon).addTo(map);
-        let maintainerName;
-        
-        if (maintainer.firstName !== null && maintainer.lastName !== null) {
-            maintainerName = `${maintainer.firstName} ${maintainer.lastName}`;
-        } else {
-            maintainerName = maintainer.userName;
-        }
-        
-        marker.bindPopup(`<b>${maintainerName}</b><br>${maintainer.maintainerAddress}<br>${maintainer.city}<br>${maintainer.postalCode}<br>${maintainer.maintainerServices ?? ''}`);
-    }
-    
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-    
-    document.getElementById("map-search").addEventListener("submit", event => {
-        event.preventDefault();
-        let address = event.target.querySelector('input').value;
-        let uriAddress = encodeURIComponent(address);
-        let baseUrl = '@(Html.Raw(Model.GeocodingUrl))';
-        let url = baseUrl.replace('{address}', uriAddress);
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                let lat = data[0].lat;
-                let lng = data[0].lon;
-                map.setView([lat, lng], 5);
-            })
-            .catch(error => console.error(error));
-    });
-</script>
-
-@foreach (var maintainer in Model.Maintainers)
-{
-    <div class="card mt-3" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title text-center">@maintainer.UserName</h5>
-            <p class="card-text text-center">@maintainer.MaintainerAddress</p>
-            <p class="card-text text-center">@maintainer.City</p>
-            <p class="card-text text-center">@maintainer.Country</p>
-            <p class="card-text text-center">@maintainer.PhoneNumber</p>
-            <p class="card-text text-center">@maintainer.Email</p>
-            <a href="@Url.Action("Index", "Maintainers", new { id = maintainer.Id })" class="btn btn-primary">View Maintainer</a>
+<div class="content">
+    <div class="map-section">
+        <div class="featured-block featured-text-block">
+            <h1 class="rubik-mono-one-regular c-dark">Find<br/> <span class="gr-text-tertiary">maintainers</span><br/> near you</h1>
+            <p>Some text here</p>
+        </div>
+        <div class="map-side">
+            <form id="map-search">
+                <input type="text" id="search" placeholder="Address">
+                <button type="submit">Search</button>
+            </form>
+            <div id="map" style="width: 500px; height: 300px"></div>
         </div>
     </div>
-}
+
+    <script>
+        let maintainersString = '@Html.Raw(Json.Serialize(Model.Maintainers.Select(m => new {
+            m.FirstName,
+            m.LastName,
+            m.UserName,
+            m.MaintainerAddress,
+            m.City,
+            m.PostalCode,
+            m.MaintainerServices,
+            m.MaintainerLatitude,
+            m.MaintainerLongitude
+        })))';
+        let maintainers = JSON.parse(maintainersString);
+        let map = L.map('map').setView([60.1699, 24.9384], 13);
+        
+        for (let maintainer of maintainers) {
+            if (maintainer.maintainerLatitude === 0 || maintainer.maintainerLongitude === 0) {
+                continue;
+            }
+            
+            let latlon = [maintainer.maintainerLatitude, maintainer.maintainerLongitude];
+            let marker = L.marker(latlon).addTo(map);
+            let maintainerName;
+            
+            if (maintainer.firstName !== null && maintainer.lastName !== null) {
+                maintainerName = `${maintainer.firstName} ${maintainer.lastName}`;
+            } else {
+                maintainerName = maintainer.userName;
+            }
+            
+            marker.bindPopup(`<b>${maintainerName}</b><br>${maintainer.maintainerAddress}<br>${maintainer.city}<br>${maintainer.postalCode}<br>${maintainer.maintainerServices ?? ''}`);
+        }
+        
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+        
+        document.getElementById("map-search").addEventListener("submit", event => {
+            event.preventDefault();
+            let address = event.target.querySelector('input').value;
+            let uriAddress = encodeURIComponent(address);
+            let baseUrl = '@(Html.Raw(Model.GeocodingUrl))';
+            let url = baseUrl.replace('{address}', uriAddress);
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    let lat = data[0].lat;
+                    let lng = data[0].lon;
+                    map.setView([lat, lng], 5);
+                })
+                .catch(error => console.error(error));
+        });
+    </script>
+
+    <h1 class="rubik-mono-one-regular c-dark">Browse all <span class="gr-text-tertiary">maintainers</span></h1>
+    <p>Some text here</p>
+            
+    <div class="product-list">
+    @foreach (var maintainer in Model.Maintainers)
+    {
+        <div class="maintainer-card">
+            <p>@maintainer.MaintainerServices</p>
+            <strong class="rubik-strong-menu">@maintainer.UserName</strong>
+            <div class="review-stars">
+                <img src="icons/star.svg" alt="star">
+                <img src="icons/star.svg" alt="star">
+                <img src="icons/star.svg" alt="star">
+                <img src="icons/star-outline.svg" alt="star">
+                <img src="icons/star-outline.svg" alt="star">
+            </div>
+            @* <a href="@Url.Action("Index", "Maintainers", new { id = maintainer.Id })" class="btn btn-primary">View Maintainer</a> *@
+        </div>
+    }
+    </div>
+</div>

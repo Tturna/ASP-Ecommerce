@@ -124,6 +124,7 @@ footer a {
   font-size: 1.25rem;
   font-weight: 800;
   font-style: normal;
+  text-align: center;
 }
 
 .btn-small {
@@ -455,11 +456,11 @@ footer a {
 }
 
 .map-section {
-width: 100%;
+  width: 100%;
   margin: 2rem auto;
   display: flex;
   flex-flow: row nowrap;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -473,6 +474,17 @@ width: 100%;
   flex-flow: column nowrap;
   justify-content: center;
   text-align: center;
+}
+
+.maintainer-card {
+  width: 25%;
+  min-width: 200px;
+  padding: 1rem;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .c-primary {
