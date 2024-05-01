@@ -212,6 +212,7 @@
             await DbContext.Products.AddAsync(Model);
             await DbContext.SaveChangesAsync();
             _products = _products.Append(Model).ToArray();
+            Model = new ProductModel();
             _message = "Product added successfully!";
             _alertClass = "alert-success";
         }
