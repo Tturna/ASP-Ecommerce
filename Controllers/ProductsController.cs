@@ -38,10 +38,17 @@ public class ProductsController(ApplicationDbContext dbContext) : Controller
         var products = await dbContext
             .Products
             .Where(p => p.Maintainer != null)
-            // .Include(p => p.Maintainer)
+            .Include(p => p.Maintainer)
             .AsNoTracking()
             .ToArrayAsync();
-
+        
+        // Remove circular reference so this object can be serialized and
+        // passed to a Razor component.
+        foreach (var product in products)
+        {
+            product.Maintainer!.MaintainerProducts = [];
+        }
+        
         var productsViewModel = new ProductsViewModel()
         {
             Products = products

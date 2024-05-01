@@ -25,23 +25,25 @@
     }
 </script>
 
-@if (isOwner)
-{
-    <component type="typeof(EditMaintainer)" param-InitialModel="@Model.Maintainer" render-mode="Server" />
-}
-else
-{
-    <h2>@Model.Maintainer.UserName</h2>
-    <p>@(Model.Maintainer.MaintainerAddress), @(Model.Maintainer.City), @(Model.Maintainer.Country)</p>
-    <p>@Model.Maintainer.MaintainerServices</p>
-    <p>Products and services sold here</p>
-    <p>@Model.Maintainer.PhoneNumber</p>
-    <p>@Model.Maintainer.Email</p>
-}
+<div class="content">
+    @if (isOwner)
+    {
+        <component type="typeof(EditMaintainer)" param-InitialModel="@Model.Maintainer" render-mode="Server" />
+    }
+    else
+    {
+        <h2>@Model.Maintainer.UserName</h2>
+        <p>@(Model.Maintainer.MaintainerAddress), @(Model.Maintainer.City), @(Model.Maintainer.Country)</p>
+        <p>@Model.Maintainer.MaintainerServices</p>
+        <p>Products and services sold here</p>
+        <p>@Model.Maintainer.PhoneNumber</p>
+        <p>@Model.Maintainer.Email</p>
+    }
 
-<h3>Products</h3>
+    <h3>Products</h3>
 
-<component type="typeof(ProductList)" render-mode="Server"
-           param-InitialData="@Model.ProductsViewModel"
-           param-ListType="@ProductListType.Individual"
-           param-OwnerMaintainer="@Model.Maintainer" />
+    <component type="typeof(ProductList)" render-mode="Server"
+               param-InitialData="@Model.ProductsViewModel"
+               param-ListType="@ProductListType.Individual"
+               param-OwnerMaintainer="@Model.Maintainer" />
+</div>

@@ -323,11 +323,6 @@ footer a {
   width: 100%;
 }
 
-.add-product {
-  width: 90%;
-  margin: 0 auto 2rem;
-}
-
 .add-product-row {
   display: flex;
   flex-flow: row nowrap;
@@ -423,6 +418,46 @@ footer a {
   margin-bottom: 0;
 }
 
+.map-section {
+  width: 100%;
+  margin: 2rem auto;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+#map {
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+}
+
+.map-side {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  text-align: center;
+}
+
+.maintainer-card {
+  width: 25%;
+  min-width: 200px;
+  padding: 1rem;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.edit-maintainer {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  column-gap: 2rem;
+}
+
 /* <weight>: Use a value from 300 to 900 */
 
 .rubik-regular {
@@ -453,38 +488,6 @@ footer a {
   font-family: "Rubik Mono One", monospace;
   font-weight: 400;
   font-style: normal;
-}
-
-.map-section {
-  width: 100%;
-  margin: 2rem auto;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center;
-}
-
-#map {
-  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
-}
-
-.map-side {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  text-align: center;
-}
-
-.maintainer-card {
-  width: 25%;
-  min-width: 200px;
-  padding: 1rem;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .c-primary {

@@ -8,39 +8,40 @@
 }
 
 @* TODO: Consider refactoring this (partial view/component) as it is similar to the form in maintainer registration *@
-<EditForm Model="Model" OnValidSubmit="Submit" FormName="EditMaintainer">
+<EditForm Model="Model" OnValidSubmit="Submit" FormName="EditMaintainer" class="edit-maintainer">
     <DataAnnotationsValidator/>
-    <ValidationSummary class="text-danger"/>
-    <div class="form-group">
-        <label  class="form-label">Business Address</label>
-        <InputText @bind-Value="Model!.MaintainerAddress" class="form-control" />
+    <ValidationSummary class="c-primary"/>
+    <div>
+        <label class="rubik-strong-menu">Business Address</label>
+        <InputText @bind-Value="Model!.MaintainerAddress" class="rubik-strong-menu" />
     </div>
-    <div class="form-group">
-        <label class="form-label">City</label>
-        <InputText @bind-Value="Model!.City" class="form-control" />
+    <div>
+        <label class="rubik-strong-menu">City</label>
+        <InputText @bind-Value="Model!.City" class="rubik-strong-menu" />
     </div>
-    <div class="form-group">
-        <label class="form-label">Postal Code</label>
-        <InputNumber @bind-Value="Model!.PostalCode" class="form-control" />
+    <div>
+        <label class="rubik-strong-menu">Postal Code</label>
+        <InputNumber @bind-Value="Model!.PostalCode" class="rubik-strong-menu" />
     </div>
-    <div class="form-group">
-        <label class="form-label">Country</label>
-        <InputText @bind-Value="Model!.Country" class="form-control" />
+    <div>
+        <label class="rubik-strong-menu">Country</label>
+        <InputText @bind-Value="Model!.Country" class="rubik-strong-menu" />
     </div>
-    <div class="form-group">
-        <label class="form-label">Services</label>
-        <InputText @bind-Value="Model!.MaintainerServices" class="form-control" />
+    <div>
+        <label class="rubik-strong-menu">Services</label>
+        <InputText @bind-Value="Model!.MaintainerServices" class="rubik-strong-menu" />
     </div>
-    <div class="form-group">
-        <label class="form-label">Phone Number</label>
-        <InputText @bind-Value="Model!.PhoneNumber" class="form-control" />
+    <div>
+        <label class="rubik-strong-menu">Phone Number</label>
+        <InputText @bind-Value="Model!.PhoneNumber" class="rubik-strong-menu" />
     </div>
-    <div class="form-group">
-        <label class="form-label">Email</label>
-        <InputText @bind-Value="Model!.Email" class="form-control" />
+    <div>
+        <label class="rubik-strong-menu">Email</label>
+        <InputText @bind-Value="Model!.Email" class="rubik-strong-menu" />
     </div>
     <button type="submit" class="btn btn-primary my-3">Update</button>
 </EditForm>
+<hr/>
 
 @code {
     [SupplyParameterFromForm]
