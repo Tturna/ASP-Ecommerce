@@ -9,7 +9,7 @@
     <div class="login-side">
         <h1 class="gr-text-primary rubik-mono-one-regular">@ViewData["Title"]</h1>
         <form id="account" method="post">
-            <div asp-validation-summary="ModelOnly" role="alert"></div>
+            <div asp-validation-summary="ModelOnly" role="alert" class="c-primary"></div>
             <div>
                 <span asp-validation-for="Input.Email" class="c-primary"></span>
                 <input asp-for="Input.Email" class="rubik-strong-menu" autocomplete="email" aria-required="true" placeholder="Email" />
