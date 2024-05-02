@@ -297,10 +297,12 @@ footer a {
 }
 
 .product-price-cart {
-  width: 75%;
+  width: 100%;
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
 }
 
 .product-descriptions {
@@ -461,6 +463,19 @@ footer a {
   flex-flow: row wrap;
   justify-content: flex-start;
   column-gap: 2rem;
+}
+
+.price-row {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.old-price {
+  color: var(--color-primary);
+  font-style: italic;
+  text-decoration: line-through;
 }
 
 /* <weight>: Use a value from 300 to 900 */

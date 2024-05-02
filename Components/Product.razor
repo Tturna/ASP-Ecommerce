@@ -24,6 +24,7 @@
             </div>
             <p>@ProductData.ShortDescription</p>
             <div class="product-price-cart">
+                <p class="old-price">@(ProductData.OldPrice) €</p>
                 <h2 class="">@(ProductData.Price) €</h2>
                 <button onclick="addItemToCart(@ProductData.Id)" class="btn btn-primary">Add to cart</button>
             </div>
@@ -58,6 +59,10 @@ else
         <div class="">
             <label class="">Price</label>
             <InputNumber @bind-Value="Model.Price" class=""/>
+        </div>
+        <div class="">
+            <label class="">Old Price</label>
+            <InputNumber @bind-Value="Model.OldPrice" class=""/>
         </div>
         <div class="">
             <label class="">Long description</label>
@@ -106,6 +111,7 @@ else
         targetProduct.Name = Model.Name;
         targetProduct.ShortDescription = Model.ShortDescription;
         targetProduct.Price = Model.Price;
+        targetProduct.OldPrice = Model.OldPrice;
         targetProduct.LongDescription = Model.LongDescription;
         targetProduct.TechDescription = Model.TechDescription;
         targetProduct.WarrantyDescription = Model.WarrantyDescription;

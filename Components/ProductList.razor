@@ -56,6 +56,10 @@
                     <label>Price</label>
                     <InputNumber @bind-Value="Model.Price" class="rubik-strong-menu" />
                 </div>
+                <div>
+                    <label>Old Price</label>
+                    <InputNumber @bind-Value="Model.OldPrice" class="rubik-strong-menu" />
+                </div>
             </div>
             <div class="add-product-row">
                 <div>
@@ -99,12 +103,22 @@
                             <img src="icons/star-outline.svg" alt="star">
                             <img src="icons/star-outline.svg" alt="star">
                         </div>
+                        @if (product.OldPrice != null)
+                        {
+                            <p class="old-price">@(product.OldPrice) €</p>
+                        }
                         <p class="rubik-strong-menu">@(product.Price) €</p>
                     </div>
                 }
                 else
                 {
-                    <p class="rubik-strong-menu">@(product.Price) €</p>
+                    <div class="price-row">
+                        @if (product.OldPrice != null)
+                        {
+                            <p class="old-price">@(product.OldPrice) €</p>
+                        }
+                        <p class="rubik-strong-menu">@(product.Price) €</p>
+                    </div>
                 }
                 
                 @* <button onclick="addItemToCart(@product.Id)" class="btn btn-primary">Add to cart</button> *@

@@ -26,6 +26,10 @@ public class ProductModel
     [Range(0, 1_000_000)]
     [DataType(DataType.Currency)]
     public decimal Price { get; set; }
+
+    [Range(0, 1_000_000)]
+    [DataType(DataType.Currency)]
+    public decimal? OldPrice { get; set; } = null;
     
     [Required, StringLength(200)]
     public string ImageUrl { get; set; } = string.Empty;
