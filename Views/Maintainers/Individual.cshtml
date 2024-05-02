@@ -32,15 +32,46 @@
     }
     else
     {
-        <h2>@Model.Maintainer.UserName</h2>
-        <p>@(Model.Maintainer.MaintainerAddress), @(Model.Maintainer.City), @(Model.Maintainer.Country)</p>
-        <p>@Model.Maintainer.MaintainerServices</p>
-        <p>Products and services sold here</p>
-        <p>@Model.Maintainer.PhoneNumber</p>
-        <p>@Model.Maintainer.Email</p>
+        <div class="maintainer-section">
+            <div class="maintainer-img">
+                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="profile picture"/>
+            </div>
+            <div class="maintainer-main">
+                <h1 class="rubik-mono-one-regular">@Model.Maintainer.UserName</h1>
+                <div class="maintainer-info-row">
+                    <img src="~/icons/store-marker-outline.svg" alt="store marker" class="icon" />
+                    <p>@(Model.Maintainer.MaintainerAddress), @(Model.Maintainer.City), @(Model.Maintainer.Country)</p>
+                </div>
+                <div class="maintainer-info-row">
+                    <img src="~/icons/toolbox.svg" alt="services" class="icon" />
+                    <p>@Model.Maintainer.MaintainerServices</p>
+                </div>
+                <div class="maintainer-info-row">
+                    <img src="~/icons/shape.svg" alt="sold products" class="icon" />
+                    <p>1234 and 123 services sold</p>
+                </div>
+            </div>
+            <div class="maintainer-contact">
+                <h2 class="rubik-strong-menu">Contact</h2>
+                @if (Model.Maintainer.PhoneNumber != null)
+                {
+                    <div class="maintainer-info-row">
+                        <img src="~/icons/phone.svg" alt="phone number" class="icon" />
+                        <p>@Model.Maintainer.PhoneNumber</p>
+                    </div>
+                }
+                @if (Model.Maintainer.Email != null)
+                {
+                    <div class="maintainer-info-row">
+                        <img src="~/icons/email.svg" alt="email address" class="icon" />
+                        <p>@Model.Maintainer.Email</p>
+                    </div>
+                }
+            </div>
+        </div>
     }
 
-    <h3>Products</h3>
+    <h3 class="rubik-mono-one-regular">Products</h3>
 
     <component type="typeof(ProductList)" render-mode="Server"
                param-InitialData="@Model.ProductsViewModel"

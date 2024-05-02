@@ -472,6 +472,56 @@ footer a {
   gap: 1rem;
 }
 
+.maintainer-section {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.maintainer-section h1, .maintainer-section h2, .maintainer-section p {
+  margin: 0;
+}
+
+.maintainer-img {
+  width: 20%;
+}
+
+.maintainer-img img {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+}
+
+.maintainer-main {
+  width: 50%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.maintainer-contact {
+  width: 20%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.maintainer-info-row {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon {
+  width: 35px;
+  height: 35px;
+}
+
 .old-price {
   color: var(--color-primary);
   font-style: italic;
