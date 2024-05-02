@@ -102,6 +102,10 @@
                         <p class="rubik-strong-menu">@(product.Price) €</p>
                     </div>
                 }
+                else
+                {
+                    <p class="rubik-strong-menu">@(product.Price) €</p>
+                }
                 
                 @* <button onclick="addItemToCart(@product.Id)" class="btn btn-primary">Add to cart</button> *@
                 
@@ -170,6 +174,7 @@
         // It can probably be added manually but it's not worth the effort rn. CBA.
         try
         {
+            // TODO: Fix bug where the first product that a maintainer adds goes to the official products
             if (_isMaintainer)
             {
                 var user = DbContext.Users.First(u => u.UserName == _principal.Identity!.Name);

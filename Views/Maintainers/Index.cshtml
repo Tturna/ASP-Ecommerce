@@ -95,8 +95,13 @@
     @foreach (var maintainer in Model.Maintainers)
     {
         <div class="maintainer-card">
+            <a asp-controller="Maintainers" asp-action="Index" asp-route-id="@maintainer.Id"
+               style="text-align: center">
+                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="profile picture"
+                     style="width: 80%; height: auto; border-radius: 50%; margin: 0 auto; display: block">
+            </a>
             <p>@maintainer.MaintainerServices</p>
-            <strong class="rubik-strong-menu">@maintainer.UserName</strong>
+            <a asp-controller="Maintainers" asp-action="Index" asp-route-id="@maintainer.Id"><strong class="rubik-strong-menu">@maintainer.UserName</strong></a>
             <div class="review-stars">
                 <img src="icons/star.svg" alt="star">
                 <img src="icons/star.svg" alt="star">

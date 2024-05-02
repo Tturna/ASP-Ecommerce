@@ -29,7 +29,6 @@ public class ShoppingCartService(ApplicationDbContext dbContext)
     public ShoppingCartModel? AddItemToCart(string username, int productId)
     {
         var item = dbContext.Products
-            .AsNoTracking()
             .FirstOrDefault(p => p.Id == productId);
 
         if (item == null) throw new Exception("Product not found");
@@ -90,6 +89,7 @@ public class ShoppingCartService(ApplicationDbContext dbContext)
         var user = dbContext.Users
             .Include(u => u.ShoppingCart)
             .ThenInclude(sc => sc!.CartItems)
+            .ThenInclude(ci => ci.Product)
             .FirstOrDefault(u => u.UserName == username);
 
         var existingItem = user?.ShoppingCart?.CartItems
