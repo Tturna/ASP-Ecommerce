@@ -28,6 +28,9 @@ public class UserModel : IdentityUser<int>
     
     public bool SaveBillingInfo { get; set; }
     
+    [PersonalData, StringLength(150)]
+    public string? ProfilePictureUrl { get; set; }
+    
     [StringLength(100)]
     public string? MaintainerServices { get; set; }
     
