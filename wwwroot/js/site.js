@@ -30,18 +30,16 @@ document.addEventListener('click', (e) => {
         cart.style.display = 'none';
     }
     
-    if (!user_dropdown.contains(e.target) && e.target.id !== 'user-name') {
+    if (!user_dropdown.contains(e.target) && e.target.id !== 'user-name' && e.target.id !== 'profile-icon') {
         user_dropdown.style.display = 'none';
     }
 });
 
-document.getElementById('user-name').addEventListener('click', (e) => {
-    e.preventDefault();
+const toggleUserDropdown = () => {
     user_dropdown.style.display = user_dropdown.style.display === 'none' ? 'block' : 'none';
-});
+};
 
 const toggleCart = () => {
-    const cart = document.getElementById('shoppingCart');
     cart.style.display = cart.style.display === 'none' ? 'block' : 'none';
 };
 

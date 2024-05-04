@@ -3,9 +3,11 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="">
-        @* <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Old</a> *@
-        <a class="clickable" id="user-name">@(User.Identity?.Name!)</a>
+    <li>
+        <img id="profile-icon" src="~/icons/account-circle.svg" alt="account" width="35" height="35" onclick="toggleUserDropdown()" />
+    </li>
+    <li>
+        <a class="clickable" id="user-name" onclick="toggleUserDropdown()">@(User.Identity?.Name!)</a>
         <div id="user-dropdown" style="display: none;">
             <ul>
                 <li>
@@ -28,11 +30,6 @@
             </ul>
         </div>
     </li>
-    @* <li class=""> *@
-    @*     <form class="" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"> *@
-    @*         <button id="logoutButton" type="submit" class="btn btn-small">Logout</button> *@
-    @*     </form> *@
-    @* </li> *@
 }
 else
 {
