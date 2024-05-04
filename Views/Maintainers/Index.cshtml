@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Maintainers";
     Layout = "_Layout";
-    var defaultProfileIcon = "/icons/account-circle-outline.svg";
+    const string defaultProfileIcon = "/icons/account-circle-outline.svg";
 }
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -23,7 +23,11 @@
     <div class="map-section">
         <div class="featured-block featured-text-block">
             <h1 class="rubik-mono-one-regular c-dark">Find<br/> <span class="gr-text-tertiary">maintainers</span><br/> near you</h1>
-            <p>Some text here</p>
+            <p class="rubik-strong-menu">
+                Find repair services or get a phone used or repaired for cheaper.
+                Never pay full price while supporting a local maintainer.
+                Enter your address to find a maintainer near you.
+            </p>
         </div>
         <div class="map-side">
             <form id="map-search">
@@ -90,7 +94,7 @@
     </script>
 
     <h1 class="rubik-mono-one-regular c-dark">Browse all <span class="gr-text-tertiary">maintainers</span></h1>
-    <p>Some text here</p>
+    <p class="rubik-strong-menu">Didn't find a good service nearby? Browse all maintainers and find exactly what you need.</p>
             
     <div class="product-list">
     @foreach (var maintainer in Model.Maintainers)
