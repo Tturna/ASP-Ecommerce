@@ -43,6 +43,7 @@ namespace ASP_Ecommerce.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public InputModel Input { get; set; }
 
+        #nullable enable
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -55,19 +56,25 @@ namespace ASP_Ecommerce.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [Phone]
             [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
+            public string? PhoneNumber { get; set; }
+            
+            [StringLength(150)]
+            public string? ProfilePictureUrl { get; set; }
         }
+        #nullable disable
 
         private async Task LoadAsync(UserModel user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var profilePictureUrl = user.ProfilePictureUrl;
 
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                ProfilePictureUrl = profilePictureUrl
             };
         }
 
@@ -106,6 +113,12 @@ namespace ASP_Ecommerce.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+            
+            if (Input.ProfilePictureUrl != user.ProfilePictureUrl)
+            {
+                user.ProfilePictureUrl = Input.ProfilePictureUrl;
+                await _userManager.UpdateAsync(user);
             }
 
             await _signInManager.RefreshSignInAsync(user);

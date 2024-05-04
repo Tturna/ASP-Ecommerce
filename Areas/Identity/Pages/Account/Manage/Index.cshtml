@@ -14,6 +14,11 @@
         <input asp-for="Username" class="rubik-strong-menu" placeholder="No username set???" disabled />
     </div>
     <div>
+        <span asp-validation-for="Input.ProfilePictureUrl" class="c-primary"></span><br/>
+        <label asp-for="Input.ProfilePictureUrl" class="rubik-strong-menu"></label><br/>
+        <input asp-for="Input.ProfilePictureUrl" class="rubik-strong-menu" placeholder="Profile picture URL"/>
+    </div>
+    <div>
         <span asp-validation-for="Input.PhoneNumber" class="c-primary"></span><br/>
         <label asp-for="Input.PhoneNumber" class="rubik-strong-menu"></label><br/>
         <input asp-for="Input.PhoneNumber" class="rubik-strong-menu" placeholder="Phone number"/>

@@ -1,10 +1,29 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using ASP_Ecommerce.Services
+@using Microsoft.IdentityModel.Tokens
 @inject SignInManager<UserModel> SignInManager
+@inject ApplicationDbContext DbContext
 
-@if (SignInManager.IsSignedIn(User))
+@{
+    UserModel? user = null;
+    var isSignedIn = SignInManager.IsSignedIn(User);
+    var profileIcon = "/icons/account-circle.svg";
+    
+    if (isSignedIn && User.Identity != null)
+    {
+        user = DbContext.Users.FirstOrDefault(u => u.UserName == User.Identity!.Name);
+
+        if (user != null && !user.ProfilePictureUrl.IsNullOrEmpty())
+        {
+            profileIcon = user.ProfilePictureUrl;
+        }
+    }
+}
+
+@if (isSignedIn)
 {
     <li>
-        <img id="profile-icon" src="~/icons/account-circle.svg" alt="account" width="35" height="35" onclick="toggleUserDropdown()" />
+        <img id="profile-icon" src="@profileIcon" alt="account" width="35" height="35" class="border-radius-50" onclick="toggleUserDropdown()" />
     </li>
     <li>
         <a class="clickable" id="user-name" onclick="toggleUserDropdown()">@(User.Identity?.Name!)</a>
