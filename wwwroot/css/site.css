@@ -158,7 +158,7 @@ footer a {
 .btn-huge {
   display: block;
   width: 80%;
-  margin: 0 auto;
+  margin: 0 auto 6rem;
   padding: 2rem 0;
   font-size: 2rem;
 }
@@ -506,9 +506,22 @@ footer a {
   width: 20%;
 }
 
-.maintainer-img img {
+.maintainer-img div {
   width: 100%;
-  height: auto;
+  position: relative;
+}
+
+.maintainer-img div::after {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.maintainer-img img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 50%;
 }
 
@@ -566,6 +579,10 @@ footer a {
 
 .border-radius-50 {
   border-radius: 50%;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
 }
 
 /* <weight>: Use a value from 300 to 900 */

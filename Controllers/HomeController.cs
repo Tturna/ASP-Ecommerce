@@ -1,21 +1,28 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ASP_Ecommerce.Models;
+using ASP_Ecommerce.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASP_Ecommerce.Controllers;
 
-public class HomeController : Controller
+public class HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext) : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<HomeController> _logger = logger;
 
     public IActionResult Index()
     {
-        return View();
+        var maintainers = dbContext.Users
+            .Where(u => u.MaintainerAddress != null)
+            .AsNoTracking()
+            .ToArray();
+
+        if (maintainers.Length > 3)
+        {
+            maintainers = maintainers.Take(3).ToArray();
+        }
+        
+        return View(maintainers);
     }
 
     public IActionResult Privacy()

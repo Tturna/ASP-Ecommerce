@@ -6,6 +6,7 @@
     ViewBag.Title = $"Maintainer - {Model.Maintainer.UserName}";
     Layout = "_Layout";
     var isOwner = User.Identity?.Name == Model.Maintainer.UserName;
+    var profileIcon = string.IsNullOrEmpty(Model.Maintainer.ProfilePictureUrl) ? "/icons/account-circle-outline.svg" : Model.Maintainer.ProfilePictureUrl;
 }
 
 <script>
@@ -34,7 +35,9 @@
     {
         <div class="maintainer-section">
             <div class="maintainer-img">
-                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="profile picture"/>
+                <div>
+                    <img src="@profileIcon" alt="profile picture"/>
+                </div>
             </div>
             <div class="maintainer-main">
                 <h1 class="rubik-mono-one-regular">@Model.Maintainer.UserName</h1>

@@ -1,12 +1,17 @@
-﻿@{
+﻿@model UserModel[]
+
+@{
     ViewData["Title"] = null;
+    var defaultProfileIcon = "/icons/account-circle-outline.svg";
 }
 
 <div class="content">
     <div class="featured-section">
         <div class="featured-block featured-text-block">
             <h1 class="rubik-mono-one-regular c-dark">Explore<br/> <span class="gr-text-primary">official</span><br/> products</h1>
-            <p>Some text here</p>
+            <p class="rubik-strong-menu mb-2">
+                Get top brand phones and tablets fresh off the shelf from our official product catalog
+            </p>
             <p><a asp-controller="Products" asp-action="Index" class="btn btn-primary">Products</a></p>
         </div>
         
@@ -30,7 +35,9 @@
         
         <div class="featured-block featured-text-block">
             <h1 class="rubik-mono-one-regular c-dark">Explore<br/> <span class="gr-text-tertiary">maintainer</span><br/> products</h1>
-            <p>Some text here</p>
+            <p class="rubik-strong-menu mb-2">
+                Get your new phone or tablet from a 3rd party maintainer near you
+            </p>
             <button class="btn btn-tertiary" asp-controller="Products" asp-action="MaintainerProducts">Products</button>
             <button class="btn btn-tertiary-light">Services</button>
         </div>
@@ -47,6 +54,31 @@
     <p><a asp-controller="Maintainers" asp-action="Register" class="btn btn-huge gr-primary rubik-mono-one-regular">Become a maintainer</a></p>
 
     <h1 class="rubik-mono-one-regular">Get it cheaper from a <span class="gr-text-tertiary">maintainer</span></h1>
-    <p>Some text here</p>
+    <p class="rubik-strong-menu mb-2">
+        Maintainers repair, refurbish and resell used phones so you don't have to pay full price.
+        Get your next phone faster and cheaper while supporting a local maintainer.
+    </p>
     <p><a asp-controller="Maintainers" asp-action="Index" class="btn btn-tertiary">Maintainers</a></p>
+    
+    <div class="product-list">
+        @foreach (var maintainer in Model)
+        {
+            var profileIcon = string.IsNullOrEmpty(maintainer.ProfilePictureUrl) ? defaultProfileIcon : maintainer.ProfilePictureUrl;
+            
+            <div class="maintainer-card">
+                <a asp-controller="Maintainers" asp-action="Index" asp-route-id="@maintainer.Id" class="maintainer-img-a">
+                    <img src="@profileIcon" alt="profile picture" />
+                </a>
+                <p>@maintainer.FeaturedMaintainerMessage</p>
+                <a asp-controller="Maintainers" asp-action="Index" asp-route-id="@maintainer.Id"><strong class="rubik-strong-menu">@maintainer.UserName</strong></a>
+                <div class="review-stars">
+                    <img src="icons/star.svg" alt="star">
+                    <img src="icons/star.svg" alt="star">
+                    <img src="icons/star.svg" alt="star">
+                    <img src="icons/star-outline.svg" alt="star">
+                    <img src="icons/star-outline.svg" alt="star">
+                </div>
+            </div>
+        }
+    </div>
 </div>
