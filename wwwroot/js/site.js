@@ -18,16 +18,26 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error:', error));
 });
 
+let cart = document.getElementById('shoppingCart');
+let user_dropdown = document.getElementById('user-dropdown');
+
 document.addEventListener('click', (e) => {
     if (e.target.id === 'logoutButton') {
         window.localStorage.removeItem('cartDict');
     }
     
-    const cart = document.getElementById('shoppingCart');
-    
     if (!cart.contains(e.target) && e.target.id !== 'cartButton') {
         cart.style.display = 'none';
     }
+    
+    if (!user_dropdown.contains(e.target) && e.target.id !== 'user-name') {
+        user_dropdown.style.display = 'none';
+    }
+});
+
+document.getElementById('user-name').addEventListener('click', (e) => {
+    e.preventDefault();
+    user_dropdown.style.display = user_dropdown.style.display === 'none' ? 'block' : 'none';
 });
 
 const toggleCart = () => {
