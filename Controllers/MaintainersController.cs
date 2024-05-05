@@ -90,6 +90,12 @@ public class MaintainersController(ApplicationDbContext dbContext,
         var fulladdress = $"{user.MaintainerAddress}, {user.City}, {user.PostalCode}, {user.Country}";
         var uriAddress = Uri.EscapeDataString(fulladdress);
         var apikey = config["LIQ_KEY"];
+        
+        if (apikey == null)
+        {
+            throw new Exception("LocationIQ API key not found in configuration.");
+        }
+        
         var uri = $"https://us1.locationiq.com/v1/search?key={apikey}&q={uriAddress}&format=json";
         var result = await httpClient.GetAsync(uri);
         var json = await result.Content.ReadAsStringAsync();
