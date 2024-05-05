@@ -29,10 +29,13 @@ public class ProductModel
 
     [Range(0, 1_000_000)]
     [DataType(DataType.Currency)]
-    public decimal? OldPrice { get; set; } = null;
+    public decimal? OldPrice { get; set; }
     
     [Required, StringLength(200)]
     public string ImageUrl { get; set; } = string.Empty;
+    
+    [Range(0, 5)]
+    public float? AverageRating { get; set; }
 
     [Required, StringLength(100), ValidCategoryPath]
     public string CategoryPath { get; set; } = string.Empty;

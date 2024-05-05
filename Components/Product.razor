@@ -16,11 +16,10 @@
         <div class="product-main-text">
             <h1 class="rubik-mono-one-regular">@ProductData.Name</h1>
             <div class="review-stars">
-                <img src="icons/star.svg" alt="star">
-                <img src="icons/star.svg" alt="star">
-                <img src="icons/star.svg" alt="star">
-                <img src="icons/star-outline.svg" alt="star">
-                <img src="icons/star-outline.svg" alt="star">
+                @for (var i = 0; i < 5; i++)
+                {
+                    <img src="icons/star@(i < _averageRating ? "" : "-outline").svg" alt="star">
+                }
             </div>
             <p>@ProductData.ShortDescription</p>
             <div class="product-price-cart">
@@ -96,6 +95,7 @@ else
     private string _message = string.Empty;
     private string _alertClass = string.Empty;
     private bool _isOwner;
+    private double _averageRating;
 
     protected override void OnInitialized()
     {
@@ -109,6 +109,8 @@ else
 
         _isOwner = (!isOfficialProduct && ProductData.Maintainer!.UserName == principal.Identity?.Name) ||
                    (isOfficialProduct && principal.IsInRole("Admin"));
+        
+        _averageRating = Math.Round(ProductData.AverageRating ?? 0);
     }
 
     private void EditProduct()

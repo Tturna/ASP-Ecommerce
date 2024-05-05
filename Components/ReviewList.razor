@@ -107,6 +107,12 @@ else
             Model = new ProductReviewModel();
             _message = "Review submitted successfully";
             _alertClass = "c-tertiary";
+            
+            var avgRating = _reviews.Average(r => r.Rating);
+            var product = DbContext.Products.First(p => p.Id == ProductId);
+            product.AverageRating = (float)avgRating;
+            
+            await DbContext.SaveChangesAsync();
         }
         catch (Exception e)
         {

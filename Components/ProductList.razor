@@ -81,6 +81,8 @@
 <div class="product-list">
     @foreach(var product in _products)
     {
+        var averageRating = Math.Round(product.AverageRating ?? 0);
+    
         <div class="product-card">
             <img src="@product.ImageUrl" class="product-card-img clickable" alt="@product.Name"
                  @onclick="@(() => Navigate($"/products/{product.Id}"))">
@@ -97,11 +99,10 @@
                 {
                     <div class="product-stars-price">
                         <div class="review-stars">
-                            <img src="icons/star.svg" alt="star">
-                            <img src="icons/star.svg" alt="star">
-                            <img src="icons/star.svg" alt="star">
-                            <img src="icons/star-outline.svg" alt="star">
-                            <img src="icons/star-outline.svg" alt="star">
+                            @for (var i = 0; i < 5; i++)
+                            {
+                                <img src="icons/star@(i < averageRating ? "" : "-outline").svg" alt="star">
+                            }
                         </div>
                         @if (product.OldPrice != null)
                         {
@@ -133,17 +134,13 @@
 </div>
 
 @code {
-    [SupplyParameterFromForm]
-    private ProductModel Model { get; set; } = new();
+    [SupplyParameterFromForm] private ProductModel Model { get; set; } = new();
 
-    [Parameter]
-    public ProductsViewModel InitialData { get; set; } = default!;
+    [Parameter] public ProductsViewModel InitialData { get; set; } = default!;
 
-    [Parameter]
-    public UserModel? OwnerMaintainer { get; set; }
+    [Parameter] public UserModel? OwnerMaintainer { get; set; }
 
-    [Parameter]
-    public ProductListType ListType { get; set; } = ProductListType.Undefined;
+    [Parameter] public ProductListType ListType { get; set; } = ProductListType.Undefined;
 
     private ProductModel[] _products = default!;
     private CategoryModel[] _categories = default!;
@@ -270,4 +267,5 @@
     {
         NavigationManager.NavigateTo(path, forceLoad: true);
     }
+
 }
