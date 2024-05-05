@@ -1,4 +1,4 @@
-﻿@model UserModel[]
+﻿@model ASP_Ecommerce.Models.ViewModels.HomeViewModel
 
 @{
     ViewData["Title"] = null;
@@ -15,22 +15,30 @@
             <p><a asp-controller="Products" asp-action="Index" class="btn btn-primary">Products</a></p>
         </div>
         
-        <div class="featured-block featured-item-block">
-            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        <div class="featured-block featured-item-block round-corners shadow">
+            <a asp-controller="Products" asp-action="Product" asp-route-id="@Model.FeaturedProducts[0].Id">
+                <img src="@Model.FeaturedProducts[0].ImageUrl" alt="placeholder" class="round-corners" />
+            </a>
         </div>
         
-        <div class="featured-block featured-item-block">
-            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        <div class="featured-block featured-item-block round-corners shadow">
+            <a asp-controller="Products" asp-action="Product" asp-route-id="@Model.FeaturedProducts[1].Id">
+                <img src="@Model.FeaturedProducts[1].ImageUrl" alt="placeholder" class="round-corners" />
+            </a>
         </div>
         
-        <div class="featured-block featured-item-block">
-            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        <div class="featured-block featured-item-block round-corners shadow">
+            <a asp-controller="Products" asp-action="Product" asp-route-id="@Model.FeaturedProducts[2].Id">
+                <img src="@Model.FeaturedProducts[2].ImageUrl" alt="placeholder" class="round-corners" />
+            </a>
         </div>
     </div>
 
     <div class="featured-section">
-        <div class="featured-block featured-item-block">
-            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        <div class="featured-block featured-item-block round-corners shadow">
+            <a asp-controller="Products" asp-action="Product" asp-route-id="@Model.FeaturedMaintainerProducts[0].Id">
+                <img src="@Model.FeaturedMaintainerProducts[0].ImageUrl" alt="placeholder"/>
+            </a>
         </div>
         
         <div class="featured-block featured-text-block">
@@ -42,12 +50,16 @@
             <button class="btn btn-tertiary-light">Services</button>
         </div>
         
-        <div class="featured-block featured-item-block">
-            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        <div class="featured-block featured-item-block round-corners shadow">
+            <a asp-controller="Products" asp-action="Product" asp-route-id="@Model.FeaturedMaintainerProducts[1].Id">
+                <img src="@Model.FeaturedMaintainerProducts[1].ImageUrl" alt="placeholder"/>
+            </a>
         </div>
         
-        <div class="featured-block featured-item-block">
-            <img src="https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024---our-top-10-list.jpg" alt="placeholder" />
+        <div class="featured-block featured-item-block round-corners shadow">
+            <a asp-controller="Products" asp-action="Product" asp-route-id="@Model.FeaturedMaintainerProducts[2].Id">
+                <img src="@Model.FeaturedMaintainerProducts[2].ImageUrl" alt="placeholder"/>
+            </a>
         </div>
     </div>
 
@@ -61,7 +73,7 @@
     <p><a asp-controller="Maintainers" asp-action="Index" class="btn btn-tertiary">Maintainers</a></p>
     
     <div class="product-list">
-        @foreach (var maintainer in Model)
+        @foreach (var maintainer in Model.FeaturedMaintainers)
         {
             var profileIcon = string.IsNullOrEmpty(maintainer.ProfilePictureUrl) ? defaultProfileIcon : maintainer.ProfilePictureUrl;
             

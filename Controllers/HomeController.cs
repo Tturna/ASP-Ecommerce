@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ASP_Ecommerce.Models;
+using ASP_Ecommerce.Models.ViewModels;
 using ASP_Ecommerce.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +23,26 @@ public class HomeController(ILogger<HomeController> logger, ApplicationDbContext
             maintainers = maintainers.Take(3).ToArray();
         }
         
-        return View(maintainers);
+        var featuredOfficialProducts = dbContext.Products
+            .Where(p => p.MaintainerId == null)
+            .Take(3)
+            .AsNoTracking()
+            .ToArray();
+        
+        var featuredMaintainerProducts = dbContext.Products
+            .Where(p => p.MaintainerId != null)
+            .Take(3)
+            .AsNoTracking()
+            .ToArray();
+
+        var homeViewModel = new HomeViewModel()
+        {
+            FeaturedMaintainers = maintainers,
+            FeaturedProducts = featuredOfficialProducts,
+            FeaturedMaintainerProducts = featuredMaintainerProducts
+        };
+        
+        return View(homeViewModel);
     }
 
     public IActionResult Privacy()
