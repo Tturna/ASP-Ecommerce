@@ -5,6 +5,7 @@
 @using System.Security.Claims
 @inject ApplicationDbContext DbContext
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JsRuntime
 
 <h2 class="rubik-mono-one-regular">User reviews</h2>
 
@@ -13,7 +14,7 @@
     <p class="alert @_alertClass">@_message</p>
 }
 
-@if (_identity?.IsAuthenticated == true)
+@if (_isAuthenticated)
 {
     <div class="shadow round-corners p-1 py-05">
         <h3 class="rubik-mono-one-regular">Write a review</h3>
@@ -60,6 +61,10 @@ else
                 <h3 class="rubik-strong-menu">@review.Title</h3>
                 <p class="rubik-strong-menu">@(review.Rating)/5</p>
                 <p>@review.Content</p>
+                @if (_principal?.IsInRole("Admin") == true)
+                {
+                    <button class="btn btn-small btn-primary" @onclick="() => DeleteReview(review.Id)">Delete</button>
+                }
             </div>
         </div>
     }
@@ -75,7 +80,8 @@ else
     List<ProductReviewModel> _reviews = [];
     private string _message = string.Empty;
     private string _alertClass = string.Empty;
-    private IIdentity? _identity;
+    private ClaimsPrincipal? _principal;
+    private bool _isAuthenticated;
 
     const string DefaultProfilePicture = "/icons/account-circle-outline.svg";
 
@@ -89,13 +95,16 @@ else
             .AsNoTracking()
             .ToList();
 
-        _identity = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity;
+        _principal = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User;
+
+        _isAuthenticated = _principal.Identity?.IsAuthenticated == true;
     }
 
     private async Task CreateReview()
     {
-        // Identity can't be null because the form is not visible to unauthenticated users
-        var user = DbContext.Users.First(u => u.UserName == _identity!.Name);
+        // principal and identity can't be null because the user must be authenticated to be here
+        var user = DbContext.Users.First(u => u.UserName == _principal!.Identity!.Name);
+        
         Model.UserId = user.Id;
         Model.ProductId = ProductId;
 
@@ -121,4 +130,38 @@ else
         }
     }
 
+    private async Task DeleteReview(int id)
+    {
+        try
+        {
+            var targetReview = DbContext.ProductReviews.First(r => r.Id == id);
+            
+            var result = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this review?");
+            
+            if (!result) return;
+            
+            DbContext.ProductReviews.Remove(targetReview);
+            await DbContext.SaveChangesAsync();
+            _reviews.RemoveAt(_reviews.FindIndex(r => r.Id == id));
+            _message = "Review deleted successfully";
+            _alertClass = "c-tertiary";
+            
+            var product = DbContext.Products.First(p => p.Id == ProductId);
+            double avgRating = 0;
+            
+            if (_reviews.Count > 0)
+            {
+                avgRating = _reviews.Average(r => r.Rating);
+            }
+            
+            product.AverageRating = (float)avgRating;
+            
+            await DbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            _message = e.Message;
+            _alertClass = "c-primary";
+        }
+    }
 }

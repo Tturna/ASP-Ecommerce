@@ -41,9 +41,6 @@
         <h2>Warranty information</h2>
         <p>@Model.WarrantyDescription</p>
     </div>
-    <hr/>
-    
-    <ReviewList ProductId="@ProductData.Id" />
 }
 else
 {
@@ -84,6 +81,9 @@ else
         <button type="submit" class="">Save</button>
     </EditForm>
 }
+<hr/>
+
+<ReviewList ProductId="@ProductData.Id" />
 
 @code {
     [SupplyParameterFromForm]
