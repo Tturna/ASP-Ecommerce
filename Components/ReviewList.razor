@@ -49,9 +49,12 @@ else
     {
         var profilePicture = review.User.ProfilePictureUrl ?? DefaultProfilePicture;
         
-        <div class="review">
-            <div class="review-pfp">
-                <img src="@profilePicture" alt="Profile picture"/>
+        <div class="review mb-2">
+            <div class="review-profile">
+                <div class="review-pfp">
+                    <img src="@profilePicture" alt="Profile picture"/>
+                </div>
+                <p class="rubik-strong-menu m-0">@review.User.UserName</p>
             </div>
             <div>
                 <h3 class="rubik-strong-menu">@review.Title</h3>

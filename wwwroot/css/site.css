@@ -585,9 +585,14 @@ footer a {
   gap: 1rem;
 }
 
+.review-profile {
+  width: 15%;
+  text-align: center;
+}
+
 .review-pfp {
   position: relative;
-  width: 15%;
+  width: 100%;
 }
 
 .review-pfp::after {
@@ -598,6 +603,7 @@ footer a {
 
 .review-pfp img {
   position: absolute;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -626,6 +632,10 @@ footer a {
   border-radius: 50%;
 }
 
+.w-100 {
+  width: 100%;
+}
+
 .p-1 {
   padding: 1rem;
 }
@@ -633,6 +643,10 @@ footer a {
 .py-05 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.m-0 {
+  margin: 0;
 }
 
 .mb-2 {

@@ -147,7 +147,6 @@
 
     private ProductModel[] _products = default!;
     private CategoryModel[] _categories = default!;
-    private bool _isMaintainer;
     private bool _isOwner;
     private string _message = string.Empty;
     private string _alertClass = string.Empty;
@@ -170,7 +169,6 @@
         _products = InitialData.Products;
         _categories = InitialData.Categories;
         _principal = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User;
-        _isMaintainer = _principal.IsInRole("Maintainer");
 
         _isOwner = ListType switch
         {
@@ -189,7 +187,7 @@
         try
         {
             // TODO: Fix bug where the first product that a maintainer adds goes to the official products
-            if (_isMaintainer)
+            if (OwnerMaintainer != null)
             {
                 var user = DbContext.Users.First(u => u.UserName == _principal.Identity!.Name);
                 Model.Maintainer = user;
