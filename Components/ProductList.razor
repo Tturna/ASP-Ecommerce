@@ -233,12 +233,12 @@
             _products = _products.Append(Model).ToArray();
             Model = new ProductModel();
             _message = "Product added successfully!";
-            _alertClass = "alert-success";
+            _alertClass = "c-tertiary";
         }
         catch (Exception e)
         {
             _message = e.Message;
-            _alertClass = "alert-danger";
+            _alertClass = "c-primary";
         }
     }
 

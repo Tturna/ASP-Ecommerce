@@ -1,0 +1,115 @@
+﻿@using ASP_Ecommerce.Models
+@using ASP_Ecommerce.Services
+@using Microsoft.EntityFrameworkCore
+@using System.Security.Principal
+@using System.Security.Claims
+@inject ApplicationDbContext DbContext
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h2 class="rubik-mono-one-regular">User reviews</h2>
+
+@if (_message != string.Empty)
+{
+    <p class="alert @_alertClass">@_message</p>
+}
+
+@if (_identity?.IsAuthenticated == true)
+{
+    <div class="shadow round-corners p-1 py-05">
+        <h3 class="rubik-mono-one-regular">Write a review</h3>
+        <EditForm Model="Model" OnValidSubmit="CreateReview" FormName="NewReviewForm" class="flex-column">
+            <DataAnnotationsValidator />
+            <ValidationSummary/>
+            <div class="flex-row gap-1">
+                <div>
+                    <label class="rubik-strong-menu">Title</label><br/>
+                    <InputText @bind-Value="Model.Title" class="rubik-strong-menu"/>
+                </div>
+                <div>
+                    <label class="rubik-strong-menu">Score</label><br/>
+                    <InputNumber @bind-Value="Model.Rating" class="rubik-strong-menu"/>
+                </div>
+                <button type="submit" class="btn btn-small btn-primary">Submit</button>
+            </div>
+            <div>
+                <label class="rubik-strong-menu">Comment</label><br/>
+                <InputTextArea @bind-Value="Model.Content" class="rubik-strong-menu c-dark round-corners p-1"/>
+            </div>
+        </EditForm>
+    </div>
+}
+
+@if (_reviews.Count == 0)
+{
+    <p class="rubik-strong-menu">No reviews yet</p>
+}
+else
+{
+    @foreach (var review in _reviews)
+    {
+        var profilePicture = review.User.ProfilePictureUrl ?? DefaultProfilePicture;
+        
+        <div class="review">
+            <div class="review-pfp">
+                <img src="@profilePicture" alt="Profile picture"/>
+            </div>
+            <div>
+                <h3 class="rubik-strong-menu">@review.Title</h3>
+                <p class="rubik-strong-menu">@(review.Rating)/5</p>
+                <p>@review.Content</p>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    [SupplyParameterFromForm]
+    public ProductReviewModel Model { get; set; } = new();
+
+    [Parameter]
+    public int ProductId { get; set; }
+
+    List<ProductReviewModel> _reviews = [];
+    private string _message = string.Empty;
+    private string _alertClass = string.Empty;
+    private IIdentity? _identity;
+
+    const string DefaultProfilePicture = "/icons/account-circle-outline.svg";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _reviews = DbContext.ProductReviews
+            .Where(p => p.ProductId == ProductId)
+            .Include(p => p.User)
+            .AsNoTracking()
+            .ToList();
+
+        _identity = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity;
+    }
+
+    private async Task CreateReview()
+    {
+        // Identity can't be null because the form is not visible to unauthenticated users
+        var user = DbContext.Users.First(u => u.UserName == _identity!.Name);
+        Model.UserId = user.Id;
+        Model.ProductId = ProductId;
+
+        try
+        {
+            DbContext.ProductReviews.Add(Model);
+            await DbContext.SaveChangesAsync();
+            _reviews.Add(Model);
+            Model = new ProductReviewModel();
+            _message = "Review submitted successfully";
+            _alertClass = "c-tertiary";
+        }
+        catch (Exception e)
+        {
+            _message = e.Message;
+            _alertClass = "c-primary";
+        }
+    }
+
+}

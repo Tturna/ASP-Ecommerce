@@ -24,7 +24,10 @@
             </div>
             <p>@ProductData.ShortDescription</p>
             <div class="product-price-cart">
-                <p class="old-price">@(ProductData.OldPrice) €</p>
+                @if (ProductData.OldPrice != null && ProductData.OldPrice != 0)
+                {
+                    <p class="old-price">@(ProductData.OldPrice) €</p>
+                }
                 <h2 class="">@(ProductData.Price) €</h2>
                 <button onclick="addItemToCart(@ProductData.Id)" class="btn btn-primary">Add to cart</button>
             </div>
@@ -39,6 +42,9 @@
         <h2>Warranty information</h2>
         <p>@Model.WarrantyDescription</p>
     </div>
+    <hr/>
+    
+    <ReviewList ProductId="@ProductData.Id" />
 }
 else
 {
@@ -81,9 +87,11 @@ else
 }
 
 @code {
-    [SupplyParameterFromForm] public ProductModel Model { get; set; } = new();
+    [SupplyParameterFromForm]
+    public ProductModel Model { get; set; } = new();
 
-    [Parameter] public ProductModel ProductData { get; set; } = default!;
+    [Parameter]
+    public ProductModel ProductData { get; set; } = default!;
 
     private string _message = string.Empty;
     private string _alertClass = string.Empty;
@@ -128,4 +136,5 @@ else
             _alertClass = "alert-danger";
         }
     }
+
 }
