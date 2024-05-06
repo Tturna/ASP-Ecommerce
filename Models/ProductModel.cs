@@ -10,13 +10,13 @@ public class ProductModel
     [Required, StringLength(100)]
     public string Name { get; set; } = string.Empty;
 
-    [Required, StringLength(200)]
+    [Required, StringLength(800)]
     public string ShortDescription { get; set; } = string.Empty;
 
-    [StringLength(500)]
+    [StringLength(2000)]
     public string? LongDescription { get; set; }
     
-    [StringLength(500)]
+    [StringLength(2000)]
     public string? TechDescription { get; set; }
     
     [StringLength(500)]

@@ -23,6 +23,19 @@ public class ProductsController(ApplicationDbContext dbContext) : Controller
             .AsNoTracking()
             .ToArrayAsync();
 
+        // This fixes a weird bug where if a product has a string in the TechDescription property (and/or presumably
+        // in the other properties as well) that is of certain, seemingly ranaom length,
+        // the ProductList component will not render at all and will not throw any errors.
+        // These values can be emptied here because we're not tracking the products and they're not used in
+        // the product list.
+        foreach (var p in products)
+        {
+            p.ShortDescription = string.Empty;
+            p.LongDescription = null;
+            p.TechDescription = null;
+            p.WarrantyDescription = null;
+        }
+
         var productsViewModel = new ProductsViewModel()
         {
             Products = products,

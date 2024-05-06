@@ -14,4 +14,5 @@
     <component type="typeof(ProductList)" render-mode="Server"
                param-InitialData="@Model"
                param-ListType="@ProductListType.Official"/>
+    @* @(await Html.RenderComponentAsync<ProductList>(RenderMode.Server, new { InitialData = initialData, ListType = ProductListType.Official })) *@
 </div>

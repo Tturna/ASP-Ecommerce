@@ -51,6 +51,9 @@ else
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.EnsureCreated();
+    
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
     var roles = Enum.GetNames(typeof(UserRole));
 
@@ -63,7 +66,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

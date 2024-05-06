@@ -46,8 +46,8 @@
             <p class="rubik-strong-menu mb-2">
                 Get your new phone or tablet from a 3rd party maintainer near you
             </p>
-            <button class="btn btn-tertiary" asp-controller="Products" asp-action="MaintainerProducts">Products</button>
-            <button class="btn btn-tertiary-light">Services</button>
+            <a class="btn btn-tertiary" asp-controller="Products" asp-action="MaintainerProducts">Products</a>
+            @* <button class="btn btn-tertiary-light">Services</button> *@
         </div>
         
         <div class="featured-block featured-item-block round-corners shadow">
@@ -83,13 +83,6 @@
                 </a>
                 <p>@maintainer.FeaturedMaintainerMessage</p>
                 <a asp-controller="Maintainers" asp-action="Index" asp-route-id="@maintainer.Id"><strong class="rubik-strong-menu">@maintainer.UserName</strong></a>
-                @* <div class="review-stars"> *@
-                @*     <img src="icons/star.svg" alt="star"> *@
-                @*     <img src="icons/star.svg" alt="star"> *@
-                @*     <img src="icons/star.svg" alt="star"> *@
-                @*     <img src="icons/star-outline.svg" alt="star"> *@
-                @*     <img src="icons/star-outline.svg" alt="star"> *@
-                @* </div> *@
             </div>
         }
     </div>

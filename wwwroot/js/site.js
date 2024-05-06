@@ -1,9 +1,15 @@
 ﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
+let cart;
+let user_dropdown;
+
 document.addEventListener('DOMContentLoaded', () => {
     let cartDictJson = window.localStorage.getItem('cartDict');
-    
+    cart = document.getElementById('shoppingCart');
+    user_dropdown = document.getElementById('user-dropdown');
+
+
     fetch('/ShoppingCart/GetCart', {
         method: 'POST',
         headers: {
@@ -17,9 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => console.error('Error:', error));
 });
-
-let cart = document.getElementById('shoppingCart');
-let user_dropdown = document.getElementById('user-dropdown');
 
 document.addEventListener('click', (e) => {
     if (e.target.id === 'logoutButton') {

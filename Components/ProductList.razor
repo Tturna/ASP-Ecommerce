@@ -205,7 +205,6 @@
         // It can probably be added manually but it's not worth the effort rn. CBA.
         try
         {
-            // TODO: Fix bug where the first product that a maintainer adds goes to the official products
             if (OwnerMaintainer != null)
             {
                 var user = DbContext.Users.First(u => u.UserName == _principal.Identity!.Name);
@@ -273,7 +272,7 @@
         try
         {
             DbContext.Products.Remove(targetProduct);
-            _products = _products.Where(p => p.Id != id).ToArray();
+            _visibleProducts = _visibleProducts.Where(p => p.Id != id).ToList();
             await DbContext.SaveChangesAsync();
             _message = "Product deleted successfully!";
             _alertClass = "alert-success";
