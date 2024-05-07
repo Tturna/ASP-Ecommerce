@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using dotenv.net;
 
 namespace ASP_Ecommerce.Controllers;
 
@@ -89,9 +90,15 @@ public class MaintainersController(ApplicationDbContext dbContext,
 
         var fulladdress = $"{user.MaintainerAddress}, {user.City}, {user.PostalCode}, {user.Country}";
         var uriAddress = Uri.EscapeDataString(fulladdress);
-        var apikey = config["LIQ_KEY"];
+
+        var envVars = DotEnv.Read();
+        string apikey;
         
-        if (apikey == null)
+        try
+        {
+            apikey = envVars["LIQ_KEY"];
+        }
+        catch (Exception)
         {
             throw new Exception("LocationIQ API key not found in configuration.");
         }

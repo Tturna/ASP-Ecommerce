@@ -3,6 +3,7 @@ using ASP_Ecommerce.Models;
 using ASP_Ecommerce.Models.Enums;
 using ASP_Ecommerce.Services;
 using Microsoft.AspNetCore.Identity;
+using dotenv.net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,8 @@ builder.Services.AddScoped(sp =>
     {
         BaseAddress = new Uri(builder.Configuration["BaseUrl"] ?? "http://localhost:5178/")
     });
+
+DotEnv.Load();
 
 var app = builder.Build();
 

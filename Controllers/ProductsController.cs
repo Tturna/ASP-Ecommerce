@@ -1,5 +1,4 @@
-﻿using ASP_Ecommerce.Models;
-using ASP_Ecommerce.Models.ViewModels;
+﻿using ASP_Ecommerce.Models.ViewModels;
 using ASP_Ecommerce.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
